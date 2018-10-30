@@ -1,13 +1,43 @@
-import express from 'express'
+import express, { ErrorRequestHandler } from 'express'
+import expressWs from 'express-ws'
 
+import { log } from '@common/logger'
 
-const app = express()
-const port = 8090
+import './mongoose'
 
+let app = express()
+expressWs(app)
+// NOTE: this has to be after app's websocket initialization
+import templatesRouter from './api/templates'
+import { APIError } from '@common/Error';
 
+const port = 3001
 
-app.get('/', (req, res) => {
-  res.send('Hello there')
+// enable CORS
+app.use(function(_, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
+// enable client access location header
+app.use((__dirname, res, next) => {
+  res.header("Access-Control-Expose-Headers", "location")
+  next()
 })
 
-app.listen(port, () => console.log(`listening on port ${port}`))
+app.use('/api/templates', templatesRouter)
+
+app.use(((err, req, res, _) => {
+  if(err instanceof APIError) {
+    res.status(err.httpCode || 400)
+    res.send(err.toJSON())
+  } else {
+    res.sendStatus(500)
+  }
+}) as ErrorRequestHandler)
+
+app.get('/api/', (_, res) => res.send('Hello World!'))
+
+app.listen(port, () => log('info', `No-mad app listening on port ${port}!`))
+
+//docker container start 789e323c20cb
