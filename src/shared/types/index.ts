@@ -1,5 +1,7 @@
+import { ProcessingEvent } from '../processingMessages'
+
 export type ProcessingMessage = {
-  name: string,
+  event: ProcessingEvent,
   status: 'start' | 'end' | 'error'
   params?: {
     [key: string]: any

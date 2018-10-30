@@ -5,13 +5,15 @@ import * as React from 'react'
 
 import { ProcessingMessage } from '@shared/types'
 import absolutify from './utils/absolutify'
+import websocketListener from './screens/templates/containers/websocketListener';
+import ListProgress from './screens/templates/components/ListProgress';
 
 
-class Upload extends React.Component<{}, { file?: any, processing: boolean, progress: any[] }> {
+class Upload extends React.Component<{}, { file?: any, processing: boolean, location?: string }> {
 
   constructor(props: {}) {
     super(props)
-    this.state = { progress: [] as ProcessingMessage[], processing: false }
+    this.state = { processing: false }
   }
 
   handleSubmit = (values: any) => {
@@ -26,28 +28,10 @@ class Upload extends React.Component<{}, { file?: any, processing: boolean, prog
     .post('/api/templates', data)
     .then(response => {
       console.log(response)
-      const { location } = response.headers
-      this.subscribeForProgress(location) 
+      let { location } = response.headers
+      location = absolutify(location, 'ws:')
+      this.setState({ location })
     })
-  }
-
-  subscribeForProgress = (location: string) => {
-    const url = absolutify(location, 'ws:')
-    const ws = new WebSocket(url)
-
-    ws.addEventListener('open', function (event) {
-      console.log('opened')
-    });
-
-    this.setState({ progress: [] })
-    
-    // Listen for messages
-    ws.addEventListener('message', (event) => {
-      const message = JSON.parse(event.data) as ProcessingMessage
-      const progress = [ ...this.state.progress, message ]
-      this.setState({ progress })
-      console.log('Message from server ', event.data)
-    });
   }
 
   setFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +42,12 @@ class Upload extends React.Component<{}, { file?: any, processing: boolean, prog
   }
 
   render() {
-    const progress = this.state.progress.map(p => <div>{p.name}:{p.status}</div>)
+    // FIXME: just trial. don't do this in render!
+    let Progress: React.ComponentType | null = null
+    if(this.state.location) {
+      Progress = websocketListener<ProcessingMessage>(this.state.location)(ListProgress)
+    }
+
     return (
       <div>
         <Formik
@@ -75,8 +64,7 @@ class Upload extends React.Component<{}, { file?: any, processing: boolean, prog
               <button type="submit">Submit</button>
             </form>
           )} />
-        {progress}
-       
+        { Progress && <Progress /> }
       </div>
     )
   }

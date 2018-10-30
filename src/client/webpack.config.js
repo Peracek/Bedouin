@@ -1,6 +1,7 @@
 const path = require('path')
 const proxyMiddleware = require('http-proxy-middleware')
 const convert = require('koa-connect')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = {
   mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
@@ -16,7 +17,8 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [".ts", ".tsx", ".js", ".json"]
+    extensions: [".ts", ".tsx", ".js", ".json"],
+    plugins: [new TsconfigPathsPlugin({ /*configFile: "./path/to/tsconfig.json" */ })]
 },
 
 module: {
