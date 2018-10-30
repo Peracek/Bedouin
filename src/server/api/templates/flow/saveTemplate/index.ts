@@ -1,6 +1,7 @@
 import { Observable, Observer } from 'rxjs'
 
 import * as types from '@types'
+import { ProcessingMessage } from '@shared/types'
 import logger, { log } from '@common/logger'
 
 import validateBrackets from './validateBrackets'
@@ -11,7 +12,7 @@ import saveToDb from './saveToDb'
 const saveTemplate = (template: types.Template) => {
   const { jobDescription } = template
 
-  const flow = Observable.create(async (observer: Observer<types.ProcessingMessage>) => {
+  const flow = Observable.create(async (observer: Observer<ProcessingMessage>) => {
     try {
       observer.next({ name: 'bracket_validation', status: 'start' })
       await validateBrackets(jobDescription)

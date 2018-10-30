@@ -3,16 +3,9 @@ import { Field, Formik } from 'formik'
 import * as React from 'react'
 // import { compose, withState } from 'recompose'
 
+import { ProcessingMessage } from '@shared/types'
 import absolutify from './utils/absolutify'
 
-
-export type ProcessingMessage = {
-  name: string,
-  status: 'start' | 'end' | 'error'
-  params?: {
-    [key: string]: any
-  }
-}
 
 class Upload extends React.Component<{}, { file?: any, processing: boolean, progress: any[] }> {
 

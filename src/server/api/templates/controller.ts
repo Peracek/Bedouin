@@ -3,11 +3,12 @@ import { Observable, ReplaySubject } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 
 import * as types from '@types'
+import { ProcessingMessage } from '@shared/types'
 import { APIError, AppError } from '@common/Error'
 import Template from '@model/Template'
 import saveTemplateFlow from './flow/saveTemplate'
 
-type Processing = Observable<types.ProcessingMessage>
+type Processing = Observable<ProcessingMessage>
 const uploadProcessings = new NodeCache<Processing>({
   stdTTL: 900,
   useClones: false // what happens to subscribers if it gets deleted?
@@ -18,7 +19,7 @@ const uploadProcessings = new NodeCache<Processing>({
  */
 export const processUploadedTemplate = (template: types.Template) => {
   const flow = saveTemplateFlow(template)
-  const process = new ReplaySubject<types.ProcessingMessage>()
+  const process = new ReplaySubject<ProcessingMessage>()
   flow.subscribe(process)
   
   uploadProcessings.set(template.name, process)

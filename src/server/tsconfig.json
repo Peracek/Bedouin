@@ -16,6 +16,7 @@
           "common/*"
       ],
       "@types": [ "common/types" ],
+      "@shared/*": [ "../shared/*" ],
       "@utils/*": [ "common/utils/*" ],
       "*": [
           "types/*"
@@ -23,6 +24,7 @@
     }
   },
   "include": [
-    "./**/*"
+    "./**/*",
+    "../shared/**/*"
   ]
 }
