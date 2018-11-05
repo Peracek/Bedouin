@@ -3,28 +3,29 @@ import { Link, Route } from 'react-router-dom'
 
 import Jobs from './Jobs'
 import Upload from './Upload'
+import Test from './Test'
+import Templates from './screens/templates'
 
-const HelloWorld = () => <span>Hello world!</span>
 
 const routes = [
   {
     path: '/',
     name: 'index',
     exact: true,
-    component: HelloWorld
+    component: Test
   },
   {
     path: '/upload',
     name: 'upload',
     exact: true,
-    component: Upload,
+    component: Templates,
   },
   {
     path: '/jobs',
     name: 'jobs',
     exact: true,
     component: Jobs,
-  },
+  }
 ]
 
 class App extends React.Component {
