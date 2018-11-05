@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { withFormik, Formik, Field, FormikProps } from 'formik'
+import { withFormik, Formik, Field, FormikProps, FormikBag } from 'formik'
 
 import { RichTextField } from '@components/formFields/TextField'
 
@@ -7,15 +7,20 @@ import handleFileUpload from '../handleFileUpload'
 
 
 type FormProps = {
-  handleSubmit(arg: TODO): TODO,
+  handleSubmit(values: TODO): TODO,
   handleFileChange(arg: TODO): TODO
 }
 const Form = (props: FormProps) => (
   <Formik
     onSubmit={(values, actions) => {
+      actions.setErrors({ name: 'je to chyba' })
+      return
       props.handleSubmit(values)
         .then(() => {
           actions.setSubmitting(false)
+        })
+        .catch(() => {
+          actions.setError('Unknown error')
         })
     }}
     initialValues={{

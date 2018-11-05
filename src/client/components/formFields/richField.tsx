@@ -1,23 +1,21 @@
 import * as React from 'react'
-
+import { ErrorMessage } from 'formik'
 
 const Label = (props: {
   htmlFor: string,
-  label: string,
-  // error?: string
+  label: string
 }) => (
   <label htmlFor={props.htmlFor}>{props.label}</label>
 )
 
-const InputFeedback = (props: { error: string }) => (
-  <span>{props.error}</span>
+const InputFeedback = (props: { for: string }) => (
+  <ErrorMessage name={props.for} />
 )
 
 type FieldProps = { name: string }
 
 type RichFieldProps = {
   label: string,
-  error?: string
 }
 /**
  * Adds label and error message to a field
@@ -25,7 +23,6 @@ type RichFieldProps = {
  const richField = (FieldComponent: React.ComponentType<FieldProps>) => (props: FieldProps & RichFieldProps) => {
    const {
      label,
-     error,
      ...otherProps
    } = props
 
@@ -33,7 +30,7 @@ type RichFieldProps = {
     <div>
       <Label htmlFor={otherProps.name} label={label} />
       <FieldComponent {...otherProps} />
-      {error && <InputFeedback error={error} />}
+      <InputFeedback for={otherProps.name} />
     </div>
    )
  }
