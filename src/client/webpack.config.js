@@ -2,6 +2,7 @@ const path = require('path')
 const proxyMiddleware = require('http-proxy-middleware')
 const convert = require('koa-connect')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const history = require('connect-history-api-fallback')
 
 module.exports = {
   mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
@@ -49,6 +50,7 @@ module: {
     port: 9000,
     add: (app, middleware, options) => {
       app.use(convert(proxyMiddleware('/api', { target: 'http://localhost:3001', ws: true })))
+      app.use(convert(history()))
     }
   },
 
