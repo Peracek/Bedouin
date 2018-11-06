@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { ErrorMessage } from 'formik'
+import { omit } from 'lodash'
 
 const Label = (props: {
   htmlFor: string,
@@ -12,7 +13,9 @@ const InputFeedback = (props: { for: string }) => (
   <ErrorMessage name={props.for} />
 )
 
-type FieldProps = { name: string }
+type FieldProps = { 
+  name: string 
+}
 
 type RichFieldProps = {
   label: string,
@@ -20,11 +23,9 @@ type RichFieldProps = {
 /**
  * Adds label and error message to a field
  */
- const richField = (FieldComponent: React.ComponentType<FieldProps & { [key: string]: any }>) => (props: FieldProps & RichFieldProps & { [key: string]: any }) => {
-   const {
-     label,
-     ...otherProps
-   } = props
+ const richField = <ExtraProps extends {} = {}>(FieldComponent: React.ComponentType<FieldProps & ExtraProps>) => (props: FieldProps & RichFieldProps & ExtraProps) => {
+  const label = props.label
+  const otherProps = omit(props, 'label')
    
    return (
     <div>

@@ -7,7 +7,7 @@ import handleFileUpload from '../handleFileUpload'
 import { isAPIFormErrorBody } from '@shared/types/APIErrorBody';
 import richField from '@components/formFields/richField';
 
-const FileInput = ({ handleFileChange }: any) => <input name="file" type="file" onChange={handleFileChange} />
+const FileInput = ({ handleFileChange }: { handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => <input name="file" type="file" onChange={handleFileChange} />
 const RichFileInput = richField(FileInput)
 
 type FormProps = {
@@ -27,6 +27,12 @@ const Form = (props: FormProps) => (
           console.log(err)
         })
     }}
+    validate={values => {
+      const { name } = values
+      if(!name || name.length === 0) {
+        return { name: 'Cannot be empty' }
+      }
+    }}
     initialValues={{
       name: '',
       file: '' // this is just fake for setting formik errors
@@ -34,7 +40,7 @@ const Form = (props: FormProps) => (
     render={formikProps => (
       <form onSubmit={formikProps.handleSubmit}>
         <RichTextField name="name" label="Name" />
-        <RichFileInput name="file" label="Template" handleFileChange={(e: any) => {formikProps.setFieldValue('file', ''); props.handleFileChange(e)}} />
+        <RichFileInput name="file" label="Template" handleFileChange={e => {formikProps.setFieldValue('file', ''); props.handleFileChange(e)}} />
         <button type="submit">Submit</button>
       </form>
     )} />
