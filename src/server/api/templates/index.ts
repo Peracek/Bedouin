@@ -1,6 +1,9 @@
-import express, { RequestHandler } from 'express'
+import express, { RequestHandler, ErrorRequestHandler } from 'express'
+
+import { APIError, APIErrorType } from '@common/APIError'
 
 import { 
+  isNameUnique,
   processUploadedTemplate,
   getUploadProcessing,
   getTemplate
@@ -16,20 +19,37 @@ router.get('/', async (req, res) => {
 })
 
 
-const processTemplateHandler: RequestHandler = (req, res) => {
+const processTemplateHandler: RequestHandler = (req, res, next) => {
   const { body: { name }, baseUrl } = req
   const templateFile = req.file.buffer
   const template = {
     name,
     jobDescription: templateFile.toString()
   }
-  processUploadedTemplate(template)
+  try {
+    processUploadedTemplate(template)
+  } catch(err) {
+    if(err instanceof APIError) {
+      res.status(err.status)
+      res.send(err.body)
+    } else {
+      next(err)
+    }
+  }
   res.location(`${baseUrl}/${name}`)
   res.sendStatus(202)
 }
 
 router.post('/',
   uploadHandler('file'),
+  ((err, _, res, next) => {
+    if(err instanceof APIError) {
+      res.status(err.status)
+      res.send(err.body)
+    } else {
+      next(err)
+    }
+  }) as ErrorRequestHandler,
   processTemplateHandler
 )
 

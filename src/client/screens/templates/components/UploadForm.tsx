@@ -4,32 +4,37 @@ import { withFormik, Formik, Field, FormikProps, FormikBag } from 'formik'
 import { RichTextField } from '@components/formFields/TextField'
 
 import handleFileUpload from '../handleFileUpload'
+import { isAPIFormErrorBody } from '@shared/types/APIErrorBody';
+import richField from '@components/formFields/richField';
 
+const FileInput = ({ handleFileChange }: any) => <input name="file" type="file" onChange={handleFileChange} />
+const RichFileInput = richField(FileInput)
 
 type FormProps = {
   handleSubmit(values: TODO): TODO,
-  handleFileChange(arg: TODO): TODO
+  handleFileChange(arg: TODO): TODO,
+  errors?: { [key: string]: string }
 }
 const Form = (props: FormProps) => (
   <Formik
     onSubmit={(values, actions) => {
-      actions.setErrors({ name: 'je to chyba' })
-      return
       props.handleSubmit(values)
         .then(() => {
           actions.setSubmitting(false)
         })
-        .catch(() => {
-          actions.setError('Unknown error')
+        .catch((err: any) => {
+          actions.setErrors(err)
+          console.log(err)
         })
     }}
     initialValues={{
-      name: ''
+      name: '',
+      file: '' // this is just fake for setting formik errors
     }}
     render={formikProps => (
       <form onSubmit={formikProps.handleSubmit}>
         <RichTextField name="name" label="Name" />
-        <input name="file" type="file" onChange={props.handleFileChange} />
+        <RichFileInput name="file" label="Template" handleFileChange={(e: any) => {formikProps.setFieldValue('file', ''); props.handleFileChange(e)}} />
         <button type="submit">Submit</button>
       </form>
     )} />
@@ -40,9 +45,11 @@ type UploadFormProps = {
   handleUploadProgressAt?: (wsLocation: string) => void
 }
 type UploadFormState = {
-  selectedFile: File | null
+  selectedFile: File | null,
+  errors: { [key: string]: string }
 }
 class UploadForm extends React.Component<UploadFormProps, UploadFormState> {
+  state = {} as UploadFormState
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target
@@ -54,29 +61,32 @@ class UploadForm extends React.Component<UploadFormProps, UploadFormState> {
     if(!this.state.selectedFile) {
       console.warn('no file selected')
       // FIXME: notify something?
-      return
+      return Promise.reject({ file: 'no file man' })
     }
 
     const { name } = values
     const { handleUploadProgressAt } = this.props
     return handleFileUpload(name, this.state.selectedFile)
-      .then(location => {
-        handleUploadProgressAt && handleUploadProgressAt(location)
+      .then(result => {
+        if('location' in result) {
+          handleUploadProgressAt && handleUploadProgressAt(result.location)
+        } else {
+          if(isAPIFormErrorBody(result)) {
+            const { type, params: { field } } = result.error
+            return Promise.reject({ [field]: type })
+          }
+        }
+        return Promise.resolve()
       })
-      .catch(err => {
-        console.log(err)
-        // FIXME: distinguish between axios error and other errors
-        // FIXME: notify user about error
-        debugger
-        throw err
-      })
+
   }
 
   render() {
     return (
       <Form
         handleSubmit={this.handleSubmit}
-        handleFileChange={this.handleFileChange} />
+        handleFileChange={this.handleFileChange}
+        errors={this.state.errors} />
     )
   }
 }

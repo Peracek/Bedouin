@@ -1,36 +1,24 @@
 import multer, { Options } from 'multer'
-import { RequestHandler, ErrorRequestHandler } from 'express'
+import path from 'path'
 
-import { doesTemplateNameAlreadyExist } from './controller'
-import { APIError } from '@common/Error';
+import { APIError, APIErrorType } from '@common/APIError'
 
-
-// FIXME: check for filetype
 type FileFilter = Options['fileFilter']
 
-const fileFilter: FileFilter = (req, file, cb) => {
+const createFileFilter = (fieldName: string): FileFilter => (_, file, cb) => {
   console.log(file)
-  //cb(null, true)
-  // check for filetype
+  var ext = path.extname(file.originalname);
+  if(ext !== '.m') {
+    const err = new APIError(APIErrorType.TEMPLATE_FILE_BAD_EXTENSION, 422, { field: fieldName })
+    return cb(err, false)
+  }
+  cb(null, true)
 }
 const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+const uploadHandler = 
+  (fieldName: string) => multer({ 
+    storage: storage, 
+    fileFilter: createFileFilter(fieldName)
+  }).single(fieldName)
 
-export default (fieldName: string) => {
-  const uploadHandler = upload.single(fieldName)
-
-  const nameDuplicateHandler: RequestHandler = async (req, res, next) => {
-    const { name } = req.body
-    const isDuplicit = await doesTemplateNameAlreadyExist(name)
-    if(isDuplicit) {
-      next(new APIError('template_name_duplicate', { name }, 409 ))
-      return
-    }
-    next()
-  }
-
-  return [
-    uploadHandler,
-    nameDuplicateHandler
-  ]
-}
+export default uploadHandler

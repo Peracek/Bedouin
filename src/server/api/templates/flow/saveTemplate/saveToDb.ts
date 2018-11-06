@@ -1,6 +1,6 @@
 import Template from '@model/Template'
 import * as types from '@types'
-import { AppError } from '@common/Error'
+import { AppError } from '@common/AppError'
 
 const saveToDb = (template: types.Template) => {
   const { name, jobDescription } = template

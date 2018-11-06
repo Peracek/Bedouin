@@ -20,12 +20,12 @@ type RichFieldProps = {
 /**
  * Adds label and error message to a field
  */
- const richField = (FieldComponent: React.ComponentType<FieldProps>) => (props: FieldProps & RichFieldProps) => {
+ const richField = (FieldComponent: React.ComponentType<FieldProps & { [key: string]: any }>) => (props: FieldProps & RichFieldProps & { [key: string]: any }) => {
    const {
      label,
      ...otherProps
    } = props
-
+   
    return (
     <div>
       <Label htmlFor={otherProps.name} label={label} />

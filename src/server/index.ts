@@ -9,7 +9,6 @@ let app = express()
 expressWs(app)
 // NOTE: this has to be after app's websocket initialization
 import templatesRouter from './api/templates'
-import { APIError } from '@common/Error';
 
 const port = 3001
 
@@ -27,14 +26,20 @@ app.use((__dirname, res, next) => {
 
 app.use('/api/templates', templatesRouter)
 
-app.use(((err, req, res, _) => {
-  if(err instanceof APIError) {
-    res.status(err.httpCode || 400)
-    res.send(err.toJSON())
-  } else {
-    res.sendStatus(500)
-  }
-}) as ErrorRequestHandler)
+// app.use(((err, req, res, _) => {
+//   if(isAPIError(err)) {
+//     res.status(err. || 400)
+//     res.send(err.toJSON())
+//   }
+
+
+//   if(err instanceof APIError) {
+//     res.status(err.httpCode || 400)
+//     res.send(err.toJSON())
+//   } else {
+//     res.sendStatus(500)
+//   }
+// }) as ErrorRequestHandler)
 
 app.get('/api/', (_, res) => res.send('Hello World!'))
 

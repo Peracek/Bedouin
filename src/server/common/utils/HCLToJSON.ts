@@ -1,7 +1,7 @@
 //@ts-ignore
 import hcl from 'gopher-hcl' // FIXME: add typing to gopher
 
-import { AppError } from '@common/Error'
+import { AppError } from '@common/AppError'
 
 const HCLToJSON = (template: string) => {
   try {

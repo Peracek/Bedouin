@@ -1,7 +1,5 @@
-import { AppError } from '@common/Error'
+import { AppError } from '@common/AppError'
 import * as types from '@types'
-
-class ValidationError extends Error {}
 
 /**
  * validates matching brackets [[ ]]
