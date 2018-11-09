@@ -4,6 +4,7 @@ import { Link, Route } from 'react-router-dom'
 import Jobs from './Jobs'
 import Test from './Test'
 import Upload from './ui/templates/screens/Upload'
+import Detail from './ui/templates/screens/Detail'
 
 
 const routes = [
@@ -24,6 +25,12 @@ const routes = [
     name: 'jobs',
     exact: true,
     component: Jobs,
+  },
+  {
+    path: '/detail',
+    name: 'defail',
+    exact: true,
+    component: Detail
   }
 ]
 
@@ -35,6 +42,8 @@ class App extends React.Component {
           <Link to="jobs">Jobs</Link>
           <br />
           <Link to="upload">New job</Link>
+          <br />
+          <Link to="detail">Detail</Link>
         </div>
         {routes.map(route => 
           <Route key={route.name} {...route} />

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import ListProgress from "screens/templates/components/ListProgress";
+import ListProgress from "./ui/templates/components/ListProgress";
 import { ProcessingEvent } from '@shared/processingMessages'
 
 export default (props: any) => 
