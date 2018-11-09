@@ -1,8 +1,7 @@
 import { Observable, Observer } from 'rxjs'
 
 import * as types from '@types'
-import { ProcessingMessage } from '@shared/types'
-import { ProcessingEvent as Event } from '@shared/processingMessages'
+import ProcessingMessage, { Event } from '@shared/types/ProcessingMessage'
 import logger, { log } from '@common/logger'
 
 import validateBrackets from './validateBrackets'
@@ -33,8 +32,8 @@ const saveTemplate = (template: types.Template) => {
 
     try {
       observer.next({ event: Event.SAVING, status: 'start' })
-      await saveToDb(template)
-      observer.next({ event: Event.SAVING, status: 'end' })
+      const id = await saveToDb(template)
+      observer.next({ event: Event.SAVING, status: 'end', params: { id } })
     }
     catch(err) {
       log('error', err)

@@ -1,9 +1,9 @@
 import * as React from 'react'
 
 import ListProgress from "./ui/templates/components/ListProgress";
-import { ProcessingEvent } from '@shared/processingMessages'
+import * as processing from '@shared/types/ProcessingMessage'
 
 export default (props: any) => 
   <ListProgress messages={[
-    { event: ProcessingEvent.BRACKET_VALIDATION, status: 'start' }
+    { event: processing.Event.BRACKET_VALIDATION, status: 'start' }
   ]} />

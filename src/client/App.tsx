@@ -27,7 +27,7 @@ const routes = [
     component: Jobs,
   },
   {
-    path: '/detail',
+    path: '/detail/:id',
     name: 'defail',
     exact: true,
     component: Detail

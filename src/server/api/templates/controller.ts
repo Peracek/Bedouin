@@ -62,10 +62,9 @@ export const getUploadProcessing = (templateName: string) => {
 
 export const getTemplate = async (options?: { id: string }) => {
   const id = options && options.id
-
   // return single record
   if(id) {
-    return await Template.findById({ id }).then()
+    return await Template.findById(id)
   }
   
   // return all records

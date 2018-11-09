@@ -13,11 +13,21 @@ import uploadHandler from './uploadHandler'
 
 const router = express.Router()
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+  if(!id) {
+    // TODO: return 400 or something
+    res.sendStatus(404)
+  }
+  
+  const template = await getTemplate({ id })
+  res.json(template)
+})
+
 router.get('/', async (req, res) => {
   const templates = await getTemplate()
   res.json(templates)
 })
-
 
 const processTemplateHandler: RequestHandler = (req, res, next) => {
   const { body: { name }, baseUrl } = req
@@ -62,7 +72,7 @@ router.ws('/:templateName', async (ws, req) => {
   }
   processing.subscribe(
     val => ws.send(JSON.stringify(val)),
-    err => ws.send(JSON.stringify(err)),
+    err => { ws.send(JSON.stringify(err)); ws.close(4001) },
     () => ws.close(1000)
   )
 })

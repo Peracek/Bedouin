@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 
 
 type State<T> = {
@@ -7,7 +7,7 @@ type State<T> = {
 }
 
 const websocketListener = 
-  <T>(targetUrl: string) => 
+  <T>(targetUrl: string, onMessage?: (message: T) => void, onClose?: (code: number) => void) => 
   (BaseComponent: React.ComponentType<any>) => 
   class extends React.Component<any, State<T>> {
     constructor(props: any) {
@@ -26,12 +26,17 @@ const websocketListener =
 
       ws.addEventListener('message', event => {
         const message = JSON.parse(event.data) as T
+        onMessage && onMessage(message)
         this.setState(state => ({
           messages: [
             ...state.messages,
             message
           ]
         }))
+      })
+
+      ws.addEventListener('close', event => {
+        onClose && onClose(event.code)
       })
     }
 
@@ -46,4 +51,4 @@ const websocketListener =
     }
   }
 
-  export default websocketListener
+export default websocketListener

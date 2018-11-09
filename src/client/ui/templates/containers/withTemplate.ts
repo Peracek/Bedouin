@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import fetchTemplate from '../fetchTemplate'
 
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
 type Subtract<T, K> = Omit<T, keyof K>
@@ -12,9 +13,10 @@ const withTemplate = (templateId: string) => <T extends {template: Template}>(Ba
     state = {} as State
 
     componentDidMount() {
-      setTimeout(() => {
-        this.setState({ template: { name: 'test' } })
-      }, 3000)
+      fetchTemplate(templateId)
+        .then(template => {
+          this.setState({ template })
+        })
     }
 
     render() {
