@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { compose, pure } from 'recompose'
 
-import UploadForm from './components/UploadForm'
-import ListProgress from './components/ListProgress'
-import websocketListener from './containers/websocketListener'
+import UploadForm from '../components/UploadForm'
+import ListProgress from '../components/ListProgress'
+import websocketListener from '../containers/websocketListener'
 
 
 const render = ({

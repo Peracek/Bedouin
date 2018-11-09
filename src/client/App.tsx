@@ -2,9 +2,8 @@ import * as React from 'react'
 import { Link, Route } from 'react-router-dom'
 
 import Jobs from './Jobs'
-import Upload from './Upload'
 import Test from './Test'
-import Templates from './screens/templates'
+import Upload from './ui/templates/screens/Upload'
 
 
 const routes = [
@@ -18,7 +17,7 @@ const routes = [
     path: '/upload',
     name: 'upload',
     exact: true,
-    component: Templates,
+    component: Upload,
   },
   {
     path: '/jobs',
