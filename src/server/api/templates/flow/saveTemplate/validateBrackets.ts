@@ -1,10 +1,11 @@
-import { AppError } from '@common/AppError'
+import { AppError } from '@common/Errors'
 import * as types from '@types'
 
 /**
  * validates matching brackets [[ ]]
+ * maybe TODO: ensure brackets are always inside of quotes
  */
-const validateBrackets = (template: types.Template['jobDescription']) => {
+const validateBrackets = (template: types.Template['jobHCL']) => {
   let valid = true
   let insideDoubleBrackets = false
 
@@ -27,7 +28,7 @@ const validateBrackets = (template: types.Template['jobDescription']) => {
   if(insideDoubleBrackets) valid = false
 
   if(!valid) {
-    throw new AppError('brackets_validation', 'Brackets mismatch')
+    throw new AppError('template brackets mismatch')
   }
 }
 

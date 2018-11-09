@@ -2,7 +2,8 @@
 
 export type Template = {
   name: string,
-  jobDescription: string
+  jobHCL: string,
+  jobJSON?: string
 }
 
 

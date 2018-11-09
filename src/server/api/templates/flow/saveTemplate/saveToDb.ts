@@ -1,16 +1,16 @@
 import Template from '@model/Template'
 import * as types from '@types'
-import { AppError } from '@common/AppError'
+import { AppError } from '@common/Errors'
 
 const saveToDb = (template: types.Template) => {
-  const { name, jobDescription } = template
+  const { name, jobJSON } = template
   
-  const templateToSave = new Template({ name, jobDescription })
+  const templateToSave = new Template({ name, jobJSON })
 
   return templateToSave
     .save()
     .catch(err => {
-      throw new AppError('DBERR')
+      throw new AppError('', err)
     })
 }
 

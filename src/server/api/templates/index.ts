@@ -24,7 +24,7 @@ const processTemplateHandler: RequestHandler = (req, res, next) => {
   const templateFile = req.file.buffer
   const template = {
     name,
-    jobDescription: templateFile.toString()
+    jobHCL: templateFile.toString()
   }
   try {
     processUploadedTemplate(template)

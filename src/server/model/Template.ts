@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const TemplateSchema = new mongoose.Schema({
   name: String,
-  jobDescription: String
+  jobJSON: String
 })
 
 // create fake error

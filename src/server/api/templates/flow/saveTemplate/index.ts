@@ -6,30 +6,29 @@ import { ProcessingEvent as Event } from '@shared/processingMessages'
 import logger, { log } from '@common/logger'
 
 import validateBrackets from './validateBrackets'
-import validateByNomad from './validateByNomad'
+import parse from './parse'
 import saveToDb from './saveToDb'
 
 
 const saveTemplate = (template: types.Template) => {
-  const { jobDescription } = template
-
   const flow = Observable.create(async (observer: Observer<ProcessingMessage>) => {
     try {
       observer.next({ event: Event.BRACKET_VALIDATION, status: 'start' })
-      await validateBrackets(jobDescription)
+      await validateBrackets(template.jobHCL)
       observer.next({ event: Event.BRACKET_VALIDATION, status: 'end' })
     } catch(err) {
+      log('error', err)
       observer.error({ event: Event.BRACKET_VALIDATION, status: 'error', params: { reason: 'TODO' } })
       return
     }
 
     try {
-      observer.next({ event: Event.NOMAD_VALIDATION, status: 'start' })
-      await validateByNomad(jobDescription)
-      observer.next({ event: Event.NOMAD_VALIDATION, status: 'end' })
+      observer.next({ event: Event.NOMAD_PARSE, status: 'start' })
+      template.jobJSON = await parse(template.jobHCL)
+      observer.next({ event: Event.NOMAD_PARSE, status: 'end' })
     } catch(err) {
-      observer.error({ event: Event.NOMAD_VALIDATION, status: 'error', params: { reason: 'TODO' } })
-      return
+      log('error', err)
+      observer.error({ event: Event.NOMAD_PARSE, status: 'error', params: { reason: 'TODO' } })
     }
 
     try {
@@ -38,7 +37,8 @@ const saveTemplate = (template: types.Template) => {
       observer.next({ event: Event.SAVING, status: 'end' })
     }
     catch(err) {
-      observer.error({ name: 'nomad_validation', status: 'error', params: { reason: 'TODO' } })
+      log('error', err)
+      observer.error({ event: Event.SAVING, status: 'error', params: { reason: 'TODO' } })
       return
     }
 
