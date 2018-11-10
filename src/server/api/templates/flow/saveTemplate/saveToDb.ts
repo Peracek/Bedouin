@@ -1,10 +1,8 @@
 import TemplateModel, { Template } from '@model/Template'
 import { AppError } from '@common/Errors'
 
-const saveToDb = async (template: Template) => {
-  const { name, jobJSON } = template
-  
-  const templateToSave = new TemplateModel({ name, jobJSON })
+const saveToDb = async (template: Template) => { 
+  const templateToSave = new TemplateModel(template)
 
   return templateToSave
     .save()

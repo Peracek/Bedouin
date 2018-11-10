@@ -5,7 +5,7 @@ export interface Template {
   name: string,
   jobHCL?: string,
   jobJSON?: string,
-  parameters?: [TemplateParameter]
+  parameters?: TemplateParameter[]
 }
 export type TemplateParameter = {
   word: string,

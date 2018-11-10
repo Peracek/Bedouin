@@ -13,7 +13,7 @@ const saveTemplate = (template: Template) => {
   const flow = Observable.create(async (observer: Observer<ProcessingMessage>) => {
     try {
       observer.next({ event: Event.PARSE_PARAMETERS, status: 'start' })
-      await parseParams(template.jobHCL!)
+      template.parameters = parseParams(template.jobHCL!)
       observer.next({ event: Event.PARSE_PARAMETERS, status: 'end' })
     } catch(err) {
       log('error', err)
