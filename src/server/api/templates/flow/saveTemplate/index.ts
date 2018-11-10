@@ -4,26 +4,26 @@ import { Template } from '@model/index'
 import ProcessingMessage, { Event } from '@shared/types/ProcessingMessage'
 import logger, { log } from '@common/logger'
 
-import validateBrackets from './validateBrackets'
-import parse from './parse'
+import parseParams from './parseParams'
+import nomadParse from './nomadParse'
 import saveToDb from './saveToDb'
 
 
 const saveTemplate = (template: Template) => {
   const flow = Observable.create(async (observer: Observer<ProcessingMessage>) => {
     try {
-      observer.next({ event: Event.BRACKET_VALIDATION, status: 'start' })
-      await validateBrackets(template.jobHCL!)
-      observer.next({ event: Event.BRACKET_VALIDATION, status: 'end' })
+      observer.next({ event: Event.PARSE_PARAMETERS, status: 'start' })
+      await parseParams(template.jobHCL!)
+      observer.next({ event: Event.PARSE_PARAMETERS, status: 'end' })
     } catch(err) {
       log('error', err)
-      observer.error({ event: Event.BRACKET_VALIDATION, status: 'error', params: { reason: 'TODO' } })
+      observer.error({ event: Event.PARSE_PARAMETERS, status: 'error', params: { reason: 'TODO' } })
       return
     }
 
     try {
       observer.next({ event: Event.NOMAD_PARSE, status: 'start' })
-      template.jobJSON = await parse(template.jobHCL!)
+      template.jobJSON = await nomadParse(template.jobHCL!)
       observer.next({ event: Event.NOMAD_PARSE, status: 'end' })
     } catch(err) {
       log('error', err)

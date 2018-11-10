@@ -5,5 +5,5 @@ import * as processing from '@shared/types/ProcessingMessage'
 
 export default (props: any) => 
   <ListProgress messages={[
-    { event: processing.Event.BRACKET_VALIDATION, status: 'start' }
+    { event: processing.Event.NOMAD_PARSE, status: 'start' }
   ]} />

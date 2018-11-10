@@ -1,12 +1,12 @@
 export enum Event {
-  BRACKET_VALIDATION,
+  PARSE_PARAMETERS,
   NOMAD_PARSE,
   SAVING
 }
 
 export const EventNames = new Map<Event, string>([
-  [Event.BRACKET_VALIDATION, "Bracket validation"],
-  [Event.NOMAD_PARSE, "Parsing"],
+  [Event.PARSE_PARAMETERS, "Parsing parameters"],
+  [Event.NOMAD_PARSE, "Job description validation"],
   [Event.SAVING, "Saving"],
 ])
 

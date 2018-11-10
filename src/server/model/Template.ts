@@ -13,7 +13,7 @@ export type TemplateParameter = {
   description?: string,
   type?: "string" | "boolean" | "number",
   match?: RegExp,
-  defaultValue: string | boolean | number 
+  defaultValue?: string | boolean | number 
 }
 
 interface TemplateDocument extends Template, mongoose.Document {

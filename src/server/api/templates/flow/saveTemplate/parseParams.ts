@@ -1,4 +1,6 @@
+import { TemplateParameter } from '@model/Template'
 import { AppError } from '@common/Errors'
+
 
 /**
  * validates matching brackets [[ ]]
@@ -26,11 +28,24 @@ const validateBrackets = (template: string) => {
 
   if(insideDoubleBrackets) valid = false
 
+  return valid
+}
+
+const re = /\[\[ (\S*?) ]]/g
+const parseParams = (job: string) => {
+  const valid = validateBrackets(job)
   if(!valid) {
     throw new AppError('template brackets mismatch')
   }
+
+  let result: TemplateParameter[] = []
+  let match: RegExpExecArray | null
+  while(!!(match = re.exec(job))) {
+    // TODO: check for keywords (not starting with '.' and mark them somehow)
+    const word = match[1]
+    result.push({ word })
+
+  }
 }
 
-export default validateBrackets
-// const defer = fn => value => new Promise(resolve => resolve(fn(value)))
-// export default defer(validateBrackets)
+export default parseParams
