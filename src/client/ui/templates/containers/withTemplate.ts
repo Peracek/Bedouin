@@ -1,10 +1,11 @@
 import * as React from 'react'
 
+import { Template } from '@shared/types/Template'
 import fetchTemplate from '../fetchTemplate'
 
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
 type Subtract<T, K> = Omit<T, keyof K>
-type Template = { name: string }
+
 const SomeKindOfSpinner = () => React.createElement('span', null, "spininnn...")
 
 type State = { template?: Template }

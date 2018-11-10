@@ -1,5 +1,7 @@
-import Template from './Template'
+import TemplateModel, { Template, TemplateParameter } from './Template'
 
 export {
-  Template
+  TemplateModel,
+  Template,
+  TemplateParameter
 }

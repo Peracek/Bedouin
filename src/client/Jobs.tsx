@@ -1,7 +1,10 @@
 import axios from 'axios'
-import * as React from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-export default class extends React.Component<{}, { data?: any[] }> {
+import { Template } from '@shared/types/Template'
+
+export default class extends React.Component<{}, { data?: Template[] }> {
   constructor(props: {}) {
     super(props)
 
@@ -10,7 +13,7 @@ export default class extends React.Component<{}, { data?: any[] }> {
 
   componentDidMount() {
     axios
-      .get('http://localhost:3001/templates')
+      .get('http://localhost:3001/api/templates')
       .then(response => {
         const data = response.data
         this.setState({data})
@@ -21,7 +24,7 @@ export default class extends React.Component<{}, { data?: any[] }> {
     return (
       this.state.data ?
         <div>
-          {this.state.data.map(dato => <div key={dato.id}>{JSON.stringify(dato.name)}</div>)}
+          {this.state.data.map(dato => <Link to={`/detail/${dato.name}`}><div key={dato.name}>{JSON.stringify(dato.name)}</div></Link>)}
         </div>
       :
         <div>loading</div>

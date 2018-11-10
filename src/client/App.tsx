@@ -42,8 +42,6 @@ class App extends React.Component {
           <Link to="jobs">Jobs</Link>
           <br />
           <Link to="upload">New job</Link>
-          <br />
-          <Link to="detail">Detail</Link>
         </div>
         {routes.map(route => 
           <Route key={route.name} {...route} />

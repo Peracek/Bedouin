@@ -3,9 +3,8 @@ import { Observable, ReplaySubject } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 
 import { APIError, APIErrorType } from '@common/APIError'
-import * as types from '@types'
 import ProcessingMessage from '@shared/types/ProcessingMessage'
-import Template from '@model/Template'
+import TemplateModel, { Template } from '@model/Template'
 import saveTemplateFlow from './flow/saveTemplate'
 
 
@@ -17,15 +16,14 @@ const uploadProcessings = new NodeCache<Processing>({
 
 
 export const isNameUnique = async (name: string) => {
-  Template.findOne
-  const exists = await Template.findOne({ name }).then(doc => !!doc)
+  const exists = await TemplateModel.findOne({ name }).then(doc => !!doc)
   return !exists
 }
 
 /**
  * Starts processing of uploaded template. Progress is observed by observable.
  */
-export const processUploadedTemplate = (template: types.Template) => {
+export const processUploadedTemplate = (template: Template) => {
   if(!isNameUnique(template.name)) {
     throw new APIError(APIErrorType.TEMPLATE_NAME_NOT_UNIQUE, 409, { field: 'name' })
   }
@@ -60,14 +58,14 @@ export const getUploadProcessing = (templateName: string) => {
   // )
 }
 
-export const getTemplate = async (options?: { id: string }) => {
-  const id = options && options.id
+export const getTemplate = async (options?: { name: string }) => {
+  const name = options && options.name
   // return single record
-  if(id) {
-    return await Template.findById(id)
+  if(name) {
+    return await TemplateModel.findOne({ name })
   }
   
   // return all records
-  return await Template.find()
+  return await TemplateModel.find()
 }
 

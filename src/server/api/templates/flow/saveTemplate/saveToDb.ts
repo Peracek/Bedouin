@@ -1,11 +1,10 @@
-import Template from '@model/Template'
-import * as types from '@types'
+import TemplateModel, { Template } from '@model/Template'
 import { AppError } from '@common/Errors'
 
-const saveToDb = async (template: types.Template) => {
+const saveToDb = async (template: Template) => {
   const { name, jobJSON } = template
   
-  const templateToSave = new Template({ name, jobJSON })
+  const templateToSave = new TemplateModel({ name, jobJSON })
 
   return templateToSave
     .save()

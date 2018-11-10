@@ -1,8 +1,50 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema, Types, Mongoose } from 'mongoose'
+
+export interface Template {
+  createdAt?: Date,
+  name: string,
+  jobHCL?: string,
+  jobJSON?: string,
+  parameters?: [TemplateParameter]
+}
+export type TemplateParameter = {
+  word: string,
+  label?: string,
+  description?: string,
+  type?: "string" | "boolean" | "number",
+  match?: RegExp,
+  defaultValue: string | boolean | number 
+}
+
+interface TemplateDocument extends Template, mongoose.Document {
+  createdAt: Date,
+  jobHCL: string,
+  jobJSON: string
+}
+// interface TemplateParameterDocument extends TemplateParameter, mongoose.Document {}
+
+const TemplateParameterSchema = new mongoose.Schema({
+  word: String,
+  label: String,
+  description: String,
+  type: String,
+  regex: String,
+  defaultValue: Object
+})
 
 const TemplateSchema = new mongoose.Schema({
+  createdAt: Date,
   name: String,
-  jobJSON: String
+  jobHCL: String,
+  jobJSON: String,
+  parameters: [TemplateParameterSchema]
+})
+TemplateSchema.pre<TemplateDocument>("save", function(next) {
+  const now = new Date()
+  if(!this.createdAt) {
+    this.createdAt = now
+  }
+  next()
 })
 
 // create fake error

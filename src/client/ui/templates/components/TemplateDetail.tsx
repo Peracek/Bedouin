@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type Template = { name: string } // TODO:
+import { Template } from '@shared/types/Template'
 
 type Props = {
   template: Template

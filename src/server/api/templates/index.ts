@@ -13,14 +13,9 @@ import uploadHandler from './uploadHandler'
 
 const router = express.Router()
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
-  if(!id) {
-    // TODO: return 400 or something
-    res.sendStatus(404)
-  }
-  
-  const template = await getTemplate({ id })
+router.get('/:name', async (req, res) => {
+  const { name } = req.params
+  const template = await getTemplate({ name })
   res.json(template)
 })
 
