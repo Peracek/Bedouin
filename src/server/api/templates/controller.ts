@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators'
 
 import { APIError, APIErrorType } from '@common/APIError'
 import * as types from '@types'
-import { ProcessingMessage } from '@shared/types'
+import ProcessingMessage from '@shared/types/ProcessingMessage'
 import Template from '@model/Template'
 import saveTemplateFlow from './flow/saveTemplate'
 
