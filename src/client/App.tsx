@@ -39,9 +39,9 @@ class App extends React.Component {
     return (
       <div>
         <div>
-          <Link to="jobs">Jobs</Link>
+          <Link to="/jobs">Jobs</Link>
           <br />
-          <Link to="upload">New job</Link>
+          <Link to="/upload">New job</Link>
         </div>
         {routes.map(route => 
           <Route key={route.name} {...route} />
