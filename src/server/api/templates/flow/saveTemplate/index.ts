@@ -28,6 +28,7 @@ const saveTemplate = (template: Template) => {
     } catch(err) {
       log('error', err)
       observer.error({ event: Event.NOMAD_PARSE, status: 'error', params: { reason: 'TODO' } })
+      return
     }
 
     try {
