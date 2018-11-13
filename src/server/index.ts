@@ -23,6 +23,7 @@ app.use((__dirname, res, next) => {
   res.header("Access-Control-Expose-Headers", "location")
   next()
 })
+app.use(express.json())
 
 app.use('/api/templates', templatesRouter)
 

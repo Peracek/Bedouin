@@ -24,7 +24,7 @@ export default class extends React.Component<{}, { data?: Template[] }> {
     return (
       this.state.data ?
         <div>
-          {this.state.data.map(dato => <Link to={`/detail/${dato.name}`}><div key={dato.name}>{JSON.stringify(dato.name)}</div></Link>)}
+          {this.state.data.map(dato => <Link key={dato.name} to={`/detail/${dato.name}`}><div>{JSON.stringify(dato.name)}</div></Link>)}
         </div>
       :
         <div>loading</div>

@@ -12,7 +12,7 @@ export type TemplateParameter = {
   label?: string,
   description?: string,
   type?: "string" | "boolean" | "number",
-  match?: RegExp,
+  match?: string,
   defaultValue?: string | boolean | number 
 }
 
@@ -28,7 +28,7 @@ const TemplateParameterSchema = new mongoose.Schema({
   label: String,
   description: String,
   type: String,
-  regex: String,
+  match: String,
   defaultValue: Object
 })
 

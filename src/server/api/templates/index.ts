@@ -1,17 +1,24 @@
 import express, { RequestHandler, ErrorRequestHandler } from 'express'
 
 import { APIError, APIErrorType } from '@common/APIError'
+import { TemplateParameter } from '@model/Template';
 
 import { 
   isNameUnique,
   processUploadedTemplate,
   getUploadProcessing,
-  getTemplate
+  getTemplate,
+  saveParameters
 } from './controller'
 import uploadHandler from './uploadHandler'
 
 
 const router = express.Router()
+
+router.get('/', async (req, res) => {
+  const templates = await getTemplate()
+  res.json(templates)
+})
 
 router.get('/:name', async (req, res) => {
   const { name } = req.params
@@ -19,9 +26,16 @@ router.get('/:name', async (req, res) => {
   res.json(template)
 })
 
-router.get('/', async (req, res) => {
-  const templates = await getTemplate()
-  res.json(templates)
+router.post('/:name/parameters', async (req, res) => {
+  const { name } = req.params
+  const parameters = req.body as TemplateParameter[]
+  saveParameters(parameters, name)
+    .then(() => {
+      res.sendStatus(200)
+    })
+    .catch(() => {
+      res.sendStatus(400)
+    })
 })
 
 const processTemplateHandler: RequestHandler = (req, res, next) => {

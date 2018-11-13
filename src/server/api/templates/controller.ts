@@ -4,7 +4,7 @@ import { catchError } from 'rxjs/operators'
 
 import { APIError, APIErrorType } from '@common/APIError'
 import ProcessingMessage from '@shared/types/ProcessingMessage'
-import TemplateModel, { Template } from '@model/Template'
+import TemplateModel, { Template, TemplateParameter } from '@model/Template'
 import saveTemplateFlow from './flow/saveTemplate'
 
 
@@ -69,3 +69,6 @@ export const getTemplate = async (options?: { name: string }) => {
   return await TemplateModel.find()
 }
 
+export const saveParameters = (parameters: TemplateParameter[], templateName: string) => {
+  return TemplateModel.updateOne({ name: templateName }, { $set: { parameters } })
+}
