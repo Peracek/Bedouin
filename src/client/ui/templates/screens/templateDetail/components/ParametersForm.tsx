@@ -26,6 +26,8 @@ const initializeEmptyProps = (parameter: TemplateParameter) => ({
   ...parameter
 })
 
+
+
 type Props = {
   parameters: TemplateParameter[],
   // initialValues: TODO,
@@ -57,7 +59,6 @@ const Form = (props: Props) => {
     >
       {formProps => (
         <form onSubmit={formProps.handleSubmit}>
-          {JSON.stringify(formProps)}
           {renderFields(props.parameters)}
           <button type="submit">save</button>
         </form>
