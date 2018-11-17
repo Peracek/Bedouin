@@ -7,7 +7,7 @@ const history = require('connect-history-api-fallback')
 module.exports = {
   mode: process.env.WEBPACK_SERVE ? 'development' : 'production',
 
-  entry: path.resolve(__dirname, "index.tsx"),
+  entry: path.resolve(__dirname, "src/client/index.tsx"),
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "build/client"),
@@ -26,7 +26,15 @@ module.exports = {
 module: {
   rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      {         
+        test: /\.tsx?$/, 
+        exclude: /node_modules/,
+        loader: 'awesome-typescript-loader',
+        query: {
+          configFileName: 'src/client/tsconfig.json',
+          reportFiles: ['src/client/**/*.ts']
+        } 
+      },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }

@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server-dev": "cd src/server && ts-node-dev --project tsconfig.dev.json -r tsconfig-paths/register index.ts",
-    "server-build": "cd src/server && tsc",
-    "client-dev": "cd src/client && webpack-serve",
-    "client-build": "cd src/client && webpack --config webpack.config.js --mode=production"
+    "server-dev": "cross-env NODE_ENV=development webpack --watch --config webpack.config.server.js",
+    "server-build": "echo \"Error: build script missing\" && exit 1",
+    "client-dev": "cross-env NODE_ENV=development webpack-serve --config webpack.config.client.js",
+    "client-build": "echo \"Error: build script missing\" && exit 1"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "@types/react-router-dom": "^4.3.1",
     "awesome-typescript-loader": "^5.2.1",
     "connect-history-api-fallback": "^1.5.0",
+    "cross-env": "^5.2.0",
     "http-proxy-middleware": "^0.19.0",
     "koa-connect": "^2.0.1",
     "source-map-loader": "^0.2.4",
@@ -33,6 +34,7 @@
     "typescript": "^3.1.6",
     "webpack": "^4.24.0",
     "webpack-cli": "^3.1.2",
+    "webpack-node-utils": "^3.0.0",
     "webpack-serve": "^2.0.2"
   },
   "dependencies": {
