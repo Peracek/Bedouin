@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { compose, pure } from 'recompose'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
