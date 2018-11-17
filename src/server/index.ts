@@ -3,7 +3,7 @@ import expressWs from 'express-ws'
 
 import { log } from '@common/logger'
 
-import './mongoose'
+require('./mongoose')
 
 let app = express()
 expressWs(app)
