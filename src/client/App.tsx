@@ -4,7 +4,7 @@ import { Link, Route } from 'react-router-dom'
 import Jobs from './Jobs'
 import Test from './Test'
 import Upload from './ui/templates/screens/Upload'
-import Detail from './ui/templates/screens/TemplateDetail'
+import Detail from './ui/templates/screens/templateDetail'
 
 
 const routes = [
@@ -27,9 +27,9 @@ const routes = [
     component: Jobs,
   },
   {
-    path: '/detail/:name',
+    path: '/detail/:id',
     name: 'defail',
-    exact: true,
+    exact: false,
     component: Detail
   }
 ]

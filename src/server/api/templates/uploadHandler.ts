@@ -8,7 +8,7 @@ type FileFilter = Options['fileFilter']
 const createFileFilter = (fieldName: string): FileFilter => (_, file, cb) => {
   console.log(file)
   var ext = path.extname(file.originalname);
-  if(ext !== '.m') {
+  if(ext !== '.m' && ext !== '.nomad') {
     const err = new APIError(APIErrorType.TEMPLATE_FILE_BAD_EXTENSION, 422, { field: fieldName })
     return cb(err, false)
   }

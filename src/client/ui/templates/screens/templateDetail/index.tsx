@@ -1,15 +1,43 @@
 import React, { memo } from 'react'
+import { Route, Link } from 'react-router-dom'
 
 import TemplateDetail from './components/TemplateDetail'
+import TemplateApi, { TemplateApiBag } from 'ui/templates/containers/TemplateApi';
 
 
-type Props = { match: { params: { name: string } } }
-const Detail = ({ match }: Props) => {
-  const { name } = match.params
-
+type DetailProps = { url: string, templateApi: TemplateApiBag }
+const Detail = ({ url, templateApi }: DetailProps) => {
+  if(templateApi.fetching) {
+    return (
+      <span>Spinna...</span>
+    )
+  }
+  const {
+    template,
+    postParameters
+  } = templateApi
   return (
-    <TemplateDetail templateName={name} />
+    <div>
+      <Route exact path={url} render={() => (
+        <TemplateDetail template={template!} postParameters={postParameters} />
+      )}/>
+      <Route path={`${url}/run`} render={() => (
+        <div>template run dialog HERE <Link to='./'>back</Link></div>
+      )}/>
+    </div>
   )
 }
 
-export default memo(Detail)
+type DetailWithTemplateProps = {
+  match: { url: string, params: { id: string } }
+}
+const DetailWithTemplate = ({ match }: DetailWithTemplateProps) => {
+  const { url, params: { id } } = match
+  return (
+    <TemplateApi templateId={id}>
+      {(apiProps: TODO) => <Detail {...apiProps} url={url} />}
+    </TemplateApi>
+  )
+}
+
+export default memo(DetailWithTemplate)

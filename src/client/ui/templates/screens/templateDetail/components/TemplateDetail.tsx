@@ -1,34 +1,25 @@
-import * as React from 'react'
-import { createComposer } from 'recompost'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { Template, TemplateParameter } from '@shared/types/Template'
 import ParametersForm from './ParametersForm'
-import templateApi from '../../../containers/templateApi'
+import TemplateApi from '../../../containers/TemplateApi'
 
 type Props = {
-  template?: Template,
-  fetching: boolean,
-  postParameters: ( parameters: TemplateParameter[] ) => void
+  template: Template,
+  postParameters: ( parameters: TemplateParameter[] ) => any
 }
 const TemplateDetail = (props: Props) => {
-  if(props.fetching) {
-    return <div>Spinner...</div>
-  }
-
-  const template = props.template!
+  const { template } = props
   return (
     <div>
       <h2>{template.name}</h2>
       {template.parameters && <ParametersForm parameters={template.parameters} handleSubmit={props.postParameters} />}
       <button>Edit template params</button>
-      <button>Deploy</button>
+      <Link to={`${template.name}/run`}>Run job</Link>
       <button>Back to list</button>
     </div>
   )
 }
 
-const enhance = createComposer<{templateName: string}>()
-  .withDecorator(templateApi)
-  .build()
-
-export default enhance(TemplateDetail)
+export default TemplateDetail
