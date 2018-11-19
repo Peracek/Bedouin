@@ -3,6 +3,7 @@ import { compose, pure } from 'recompose'
 import { createComposer, ComponentDecorator } from 'recompost'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
+import notify from '@common/notify'
 import ProcessingMessage, * as processing from '@shared/types/ProcessingMessage'
 import { isAPIFormErrorBody } from '@shared/types/APIErrorBody'
 import APIError from '@common/APIError'
@@ -14,24 +15,24 @@ import ListProgress from './components/ListProgress'
 type UploadTemplateHandler = TemplateApiBag['templatesApi']['uploadTemplate']
 
 const withProgressHandler = (BaseComponent: React.ComponentType<any>) => {
-  class WithProgressHandler extends React.Component<Props & RouteComponentProps<any>, { progressUrl?: string, name?: string }> {
+  class WithProgressHandler extends React.Component<Props & RouteComponentProps<any>, { progressUrl?: string, templateId?: string }> {
     state = {
       progressUrl: undefined,
-      name: undefined
+      templateId: undefined
     }
 
-    onWebsocketMessage = (message: ProcessingMessage) => {
+    onMessage = (message: ProcessingMessage) => {
       if(message.event === processing.Event.SAVING) {
-        const { name } = (message.params as { name: string })
-        this.setState({ name })
+        const { id } = (message.params as { id: string })
+        this.setState({ templateId: id })
       }
     }
 
-    onWebsocketClose = (code: number) => {
+    onClose = (code: number) => {
       if(code === 1000) {
-        this.props.history.push(`/detail/${this.state.name}`)
+        this.props.history.push(`/templates/${this.state.templateId}`)
       } else {
-        alert('TODO: notify user of error')
+        notify.error('unexpected error')
       }
     }
 
@@ -52,7 +53,10 @@ const withProgressHandler = (BaseComponent: React.ComponentType<any>) => {
         <BaseComponent
           handleTemplateUpload={this.handleUpload}>
           {progressUrl && {
-            progress: <ListProgress targetUrl={progressUrl} onClose={this.onWebsocketClose} />
+            progress: <ListProgress 
+                        targetUrl={progressUrl}
+                        onMessage={this.onMessage} 
+                        onClose={this.onClose} />
           }}
         </BaseComponent>
       )

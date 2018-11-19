@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types, Mongoose } from 'mongoose'
 
 export interface Template {
+  id: string,
   createdAt?: Date,
   name: string,
   jobHCL?: string,
@@ -18,6 +19,7 @@ export type TemplateParameter = {
 }
 
 interface TemplateDocument extends Template, mongoose.Document {
+  id: string,
   createdAt: Date,
   jobHCL: string,
   jobJSON: string
@@ -48,6 +50,8 @@ TemplateSchema.pre<TemplateDocument>("save", function(next) {
   }
   next()
 })
+TemplateSchema.set('toJSON', { virtuals: true })
+TemplateSchema.set('toObject', { virtuals: true })
 
 // create fake error
 // TemplateSchema.pre('save', next => {

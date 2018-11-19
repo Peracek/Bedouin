@@ -1,6 +1,11 @@
 import { APIErrorType, APIErrorBody } from '@shared/types/APIErrorBody'
 
 type Params = { [key: string]: string }
+type Options = {
+  apiErrortype?: APIErrorType,
+  status?: number,
+  params?: Params
+}
 class APIError extends Error {
   static body(apiErrorType: APIErrorType, params: Params ) {
     return ({
@@ -13,16 +18,24 @@ class APIError extends Error {
     }) as APIErrorBody
   }
 
+  static fromStatus(status: number) {
+    return new APIError({ status })
+  }
+
   apiErrortype: APIErrorType
   status: number
   params: Params
 
-  constructor(apiErrortype: APIErrorType, status?: number, params?: Params, message?: string) {
+  constructor(options: Options) {
     super()
-    this.apiErrortype = apiErrortype
+    const {
+      apiErrortype,
+      status,
+      params
+    } = options
+    this.apiErrortype = apiErrortype || APIErrorType.NONE
     this.status = status || 400
     this.params = params || {}
-    this.message = message || apiErrortype
   }
 
   get body() {

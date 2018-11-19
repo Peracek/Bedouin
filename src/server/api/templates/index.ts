@@ -8,6 +8,7 @@ import {
   processUploadedTemplate,
   getUploadProcessing,
   getTemplate,
+  getTemplates,
   saveParameters
 } from './controller'
 import uploadHandler from './uploadHandler'
@@ -16,17 +17,20 @@ import uploadHandler from './uploadHandler'
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  const templates = await getTemplate()
-  res.json(templates)
+  const templates = await getTemplates()
+  res.json(templates.map(t => t.toObject()))
 })
 
-router.get('/:name', async (req, res) => {
-  const { name } = req.params
-  const template = await getTemplate({ name })
-  res.json(template)
+router.get('/:id', async (req, res) => {
+  const { id } = req.params
+  const template = await getTemplate({ id })
+  if(!template) {
+    throw APIError.fromStatus(404)
+  }
+  res.json(template.toObject())
 })
 
-router.post('/:name/parameters', async (req, res) => {
+router.post('/:id/parameters', async (req, res) => {
   const { name } = req.params
   const parameters = req.body as TemplateParameter[]
   saveParameters(parameters, name)

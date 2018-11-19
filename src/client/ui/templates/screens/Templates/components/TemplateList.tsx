@@ -6,7 +6,7 @@ import { Template } from '@shared/types/Template'
 
 const renderTemplate = (t: Template) => (
   <div key={t.name}>
-    <Link to={`/templates/${t.name}`}>{t.name}</Link>
+    <Link to={`/templates/${t.id}`}>{t.name}</Link>
   </div>
 )
 

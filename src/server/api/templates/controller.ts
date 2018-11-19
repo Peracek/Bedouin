@@ -58,15 +58,12 @@ export const getUploadProcessing = (templateName: string) => {
   // )
 }
 
-export const getTemplate = async (options?: { name: string }) => {
-  const name = options && options.name
-  // return single record
-  if(name) {
-    return await TemplateModel.findOne({ name })
-  }
-  
-  // return all records
-  return await TemplateModel.find()
+export const getTemplates = () => {
+  return TemplateModel.find()
+}
+
+export const getTemplate = (options: { id: string }) => {
+  return TemplateModel.findById(options.id)
 }
 
 export const saveParameters = (parameters: TemplateParameter[], templateName: string) => {

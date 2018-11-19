@@ -4,7 +4,7 @@ export enum APIErrorType {
   TEMPLATE_NAME_NOT_UNIQUE = "template_name_not_unique",
   TEMPLATE_FILE_BAD_EXTENSION = "template_file_bad_extension",
   TEMPLATE_PARSE_ERROR = "template_parse_error",
-  UNKNOWN = "unknown",
+  NONE = "none"
 }
 
 export interface APIErrorBody {

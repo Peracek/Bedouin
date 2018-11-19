@@ -32,7 +32,11 @@ export const ListProgress = ({
 
 
 
-export default (props: { targetUrl: string, onClose: (code: number) => void }) => (
+export default (props: { 
+  targetUrl: string, 
+  onMessage?: (message: ProcessingMessage) => void, 
+  onClose?: (code: number) => void 
+}) => (
   <WebsocketListener<ProcessingMessage> {...props}>
     {ListProgress}
   </WebsocketListener>
