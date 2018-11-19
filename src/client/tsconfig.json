@@ -62,7 +62,8 @@
     "paths": {
       "@shared/*": [ "../shared/*" ],
       "@components/*": [ "./components/*" ],
-      "@utils/*": [ "./utils/*" ]
+      "@utils/*": [ "./utils/*" ],
+      "@common/*": [ "./common/*" ]
     },
 
     "resolveJsonModule": true

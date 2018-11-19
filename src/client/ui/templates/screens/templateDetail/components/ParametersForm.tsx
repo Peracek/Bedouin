@@ -27,6 +27,14 @@ const initializeEmptyProps = (parameter: TemplateParameter) => ({
 })
 
 
+const renderFields = (parameters: Props['parameters']) => {
+  return parameters.map((parameter, index) => (
+    <div key={parameter.word}>
+      <h3>{parameter.label || parameter.word}</h3>
+      <ParameterFields index={index} />
+    </div>
+  ))
+}
 
 type Props = {
   parameters: TemplateParameter[],
@@ -34,15 +42,6 @@ type Props = {
   handleSubmit: TODO
 }
 const Form = (props: Props) => {
-  const renderFields = (parameters: Props['parameters']) => {
-    return parameters.map((parameter, index) => (
-      <div key={parameter.word}>
-        <h3>{parameter.label || parameter.word}</h3>
-        <ParameterFields index={index} />
-      </div>
-    ))
-  }
-
   const initialValues = {
     p: props.parameters.map(p => initializeEmptyProps(p))
   }

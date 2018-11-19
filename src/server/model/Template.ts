@@ -9,6 +9,7 @@ export interface Template {
 }
 export type TemplateParameter = {
   word: string,
+  internal: boolean,
   label?: string,
   description?: string,
   type?: "string" | "boolean" | "number",
@@ -25,6 +26,7 @@ interface TemplateDocument extends Template, mongoose.Document {
 
 const TemplateParameterSchema = new mongoose.Schema({
   word: String,
+  internal: Boolean,
   label: String,
   description: String,
   type: String,

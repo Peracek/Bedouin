@@ -1,7 +1,8 @@
-import * as React from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import ProcessingMessage, * as processing from '@shared/types/ProcessingMessage'
+import WebsocketListener from 'ui/templates/containers/WebsocketListener'
 
 type Props = {
   messages: ProcessingMessage[]
@@ -16,8 +17,7 @@ const ProgressItem = styled.div`
   }
 `
 
-
-const ListProgress = ({
+export const ListProgress = ({
   messages
 }: Props) => {
   const messageElements = messages
@@ -30,4 +30,10 @@ const ListProgress = ({
   )
 }
 
-export default ListProgress
+
+
+export default (props: { targetUrl: string, onClose: (code: number) => void }) => (
+  <WebsocketListener<ProcessingMessage> {...props}>
+    {ListProgress}
+  </WebsocketListener>
+)

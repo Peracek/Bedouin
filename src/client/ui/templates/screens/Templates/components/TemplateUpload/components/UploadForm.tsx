@@ -3,9 +3,9 @@ import { withFormik, Formik, Field, FormikProps, FormikBag } from 'formik'
 
 import { RichTextField } from '@components/formFields/TextField'
 
-import handleFileUpload from '../handleFileUpload'
 import { isAPIFormErrorBody } from '@shared/types/APIErrorBody';
 import richField from '@components/formFields/richField';
+import APIError from '@common/APIError';
 
 const FileInput = ({ handleFileChange }: { handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => <input name="file" type="file" onChange={handleFileChange} />
 const RichFileInput = richField(FileInput)
@@ -35,7 +35,7 @@ const Form = (props: FormProps) => (
     }}
     initialValues={{
       name: '',
-      file: '' // this is just fake for setting formik errors
+      file: '' // this is just fake for enable setting formik errors
     }}
     render={formikProps => (
       <form onSubmit={formikProps.handleSubmit}>
@@ -48,7 +48,7 @@ const Form = (props: FormProps) => (
 
 
 type UploadFormProps = {
-  handleUploadProgressAt?: (wsLocation: string) => void
+  handleTemplateUpload: (name: string, file: File) => Promise<any>
 }
 type UploadFormState = {
   selectedFile: File | null,
@@ -64,27 +64,20 @@ class UploadForm extends React.Component<UploadFormProps, UploadFormState> {
   }
 
   handleSubmit = (values: any) => {
-    if(!this.state.selectedFile) {
+    const { selectedFile } = this.state
+
+    if(!selectedFile) {
       console.warn('no file selected')
-      // FIXME: notify something?
       return Promise.reject({ file: 'no file man' })
     }
 
-    const { name } = values
-    const { handleUploadProgressAt } = this.props
-    return handleFileUpload(name, this.state.selectedFile)
-      .then(result => {
-        if('location' in result) {
-          handleUploadProgressAt && handleUploadProgressAt(result.location)
-        } else {
-          if(isAPIFormErrorBody(result)) {
-            const { type, params: { field } } = result.error
-            return Promise.reject({ [field]: type })
-          }
+    return this.props.handleTemplateUpload(values.name, selectedFile)
+      .catch((apiError: APIError) => {
+        if(apiError.formError) {
+          const { type, params: { field } } = apiError.formError
+          this.setState({ errors: { [field]: type } })
         }
-        return Promise.resolve()
       })
-
   }
 
   render() {

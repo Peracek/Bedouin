@@ -31,16 +31,14 @@ class TemplateApi extends React.Component<Props, State> {
   render() {
     const { template } = this.state
     const fetching = !Boolean(template)
-    const children =  this.props.children
-    const childrenProps = {
-      templateApi: {
-        template,
-        fetching,
-        postParameters: this.apiClient.postParameters,
-        runTemplate: this.apiClient.runTemplate
-      }
+    const templateApi = {
+      template,
+      fetching,
+      postParameters: this.apiClient.postParameters,
+      runTemplate: this.apiClient.runTemplate
+    
     }
-    return React.createElement('div', null, children(childrenProps))
+    return this.props.children({ templateApi })
   }
 }
 

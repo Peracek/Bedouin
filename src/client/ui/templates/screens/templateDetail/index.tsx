@@ -1,8 +1,9 @@
 import React, { memo } from 'react'
 import { Route, Link } from 'react-router-dom'
 
-import TemplateDetail from './components/TemplateDetail'
 import TemplateApi, { TemplateApiBag } from 'ui/templates/containers/TemplateApi';
+import TemplateDetail from './components/TemplateDetail'
+import TemplateRun from './components/TemplateRun'
 
 
 type DetailProps = { url: string, templateApi: TemplateApiBag }
@@ -14,7 +15,8 @@ const Detail = ({ url, templateApi }: DetailProps) => {
   }
   const {
     template,
-    postParameters
+    postParameters,
+    runTemplate
   } = templateApi
   return (
     <div>
@@ -22,7 +24,8 @@ const Detail = ({ url, templateApi }: DetailProps) => {
         <TemplateDetail template={template!} postParameters={postParameters} />
       )}/>
       <Route path={`${url}/run`} render={() => (
-        <div>template run dialog HERE <Link to='./'>back</Link></div>
+        // <div>template run dialog HERE <Link to='.'>back</Link></div>
+        <TemplateRun template={template!} handleRun={runTemplate} />
       )}/>
     </div>
   )

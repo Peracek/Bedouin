@@ -38,14 +38,18 @@ const parseParams = (job: string) => {
     throw new AppError('template brackets mismatch')
   }
 
-  let words = new Set()
+  let words = new Set<string>()
   let match: RegExpExecArray | null
   while(!!(match = re.exec(job))) {
-    // TODO: check for keywords (not starting with '.' and mark them somehow)
     const word = match[1]
     words.add(word)
   }
-  return [...words].map(word => ({ word }) as TemplateParameter)
+  return [...words].map(word => {
+    const internal = word[0] !== '.'
+    return {
+      word: internal ? word : word.substr(1)
+    } as TemplateParameter
+  })
 }
 
 export default parseParams
