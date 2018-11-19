@@ -1,7 +1,6 @@
-import * as React from 'react'
+import React from 'react'
 import { Link, Route } from 'react-router-dom'
 
-// import Upload from './ui/templates/screens/Upload'
 import Templates from './templates/screens/Templates'
 import TemplateDetail from './templates/screens/TemplateDetail'
 
@@ -12,12 +11,6 @@ export const routes = [
     exact: true,
     component: () => <div>Hello</div>
   },
-  // {
-  //   path: '/upload',
-  //   name: 'upload',
-  //   exact: true,
-  //   component: Upload,
-  // },
   {
     path: '/templates',
     name: 'templates',
