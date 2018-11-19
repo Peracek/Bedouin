@@ -41,7 +41,7 @@ export default (templateId: string): ApiClient => ({
   },
 
   runTemplate: (values: TODO) => {
-    console.log('mock of running template request')
+    console.log('mock of running template request', values)
     return Promise.resolve('baf')
   }
 })
