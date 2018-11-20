@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",                  
+    "module": "commonjs",        
+    "allowJs": true,                       /* Allow javascript files to be compiled. */
+    "checkJs": false,           
     "outDir": "../../build/server",             
     "strict": true,                 
     "noUnusedLocals": true,
@@ -17,14 +19,15 @@
       ],
       "@types": [ "common/types" ],
       "@shared/*": [ "../shared/*" ],
-      "@utils/*": [ "common/utils/*" ],
-      "*": [
-          "types/*"
-      ]
+      "@utils/*": [ "common/utils/*" ]
     }
   },
   "include": [
     "./**/*",
     "../shared/**/*"
+  ],
+  "exclude": [
+    'node_modules',
+    '../node_modules/'
   ]
 }

@@ -1,14 +1,15 @@
-import express, { ErrorRequestHandler } from 'express'
+import express from 'express'
 import expressWs from 'express-ws'
 
 import { log } from '@common/logger'
 
-require('./mongoose')
+import './mongoose'
 
 let app = express()
 expressWs(app)
 // NOTE: this has to be after app's websocket initialization
 import templatesRouter from './api/templates'
+import jobsRouter from './api/jobs'
 
 const port = 3001
 
@@ -26,6 +27,7 @@ app.use((__dirname, res, next) => {
 app.use(express.json())
 
 app.use('/api/templates', templatesRouter)
+app.use('/api/jobs', jobsRouter)
 
 // app.use(((err, req, res, _) => {
 //   if(isAPIError(err)) {

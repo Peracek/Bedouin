@@ -1,15 +1,16 @@
 import express, { RequestHandler, ErrorRequestHandler } from 'express'
 
-import { APIError, APIErrorType } from '@common/APIError'
+import { APIError } from '@common/APIError'
 import { TemplateParameter } from '@model/Template';
 
 import { 
-  isNameUnique,
+  // isNameUnique,
   processUploadedTemplate,
   getUploadProcessing,
   getTemplate,
   getTemplates,
-  saveParameters
+  saveParameters,
+  runTempate
 } from './controller'
 import uploadHandler from './uploadHandler'
 
@@ -88,6 +89,12 @@ router.ws('/:templateName', async (ws, req) => {
     err => { ws.send(JSON.stringify(err)); ws.close(4001) },
     () => ws.close(1000)
   )
+})
+
+router.post('/:id/run', (req, res) => {
+  const { body, params: { id } } = req
+  runTempate(id, body)
+  return res.sendStatus(200)
 })
 
 

@@ -1,7 +1,7 @@
 import TemplateModel, { Template } from '@model/Template'
 import { AppError } from '@common/Errors'
 
-const saveToDb = async (template: Template) => { 
+const saveToDb = async (template: Partial<Template>) => { 
   const templateToSave = new TemplateModel(template)
 
   return templateToSave

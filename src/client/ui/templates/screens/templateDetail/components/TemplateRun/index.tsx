@@ -13,14 +13,23 @@ const initializeValues = (parameters: TemplateParameter[]) => {
   )(parameters)
 }
 
-
 type Props = {
   template: Template
-  handleRun: (parameterValues: TODO) => Promise<TODO>
+  handleRun: (parameterValues: TODO) => Promise<{}>
 }
 class TemplateRun extends React.Component<Props> {
   ref = React.createRef<Formik<any, any>>()
   submitFormik = () => this.ref.current!.handleSubmit(undefined)
+
+  handleRun(values: { [key: string]: any }) {
+    this.props.handleRun(values)  
+      .then(() => {
+        //TODO: redirec to job screen
+      })
+      .catch(err => {
+        //TODO: do whatev with error
+      })
+  } 
 
   render() {
     const { template, handleRun } = this.props

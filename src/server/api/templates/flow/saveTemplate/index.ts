@@ -2,14 +2,14 @@ import { Observable, Observer } from 'rxjs'
 
 import { Template } from '@model/index'
 import ProcessingMessage, { Event } from '@shared/types/ProcessingMessage'
-import logger, { log } from '@common/logger'
+import { log } from '@common/logger'
 
 import parseParams from './parseParams'
 import nomadParse from './nomadParse'
 import saveToDb from './saveToDb'
 
 
-const saveTemplate = (template: Template) => {
+const saveTemplate = (template: Partial<Template>) => {
   const flow = Observable.create(async (observer: Observer<ProcessingMessage>) => {
     try {
       observer.next({ event: Event.PARSE_PARAMETERS, status: 'start' })

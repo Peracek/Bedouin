@@ -23,3 +23,7 @@ export const parseHCLToJSON = async (jobHCL: string) => {
   }) 
 }
 
+export const getJob = async (name: string) => {
+  const { data } = await axios.get(`${ENDPOINT}/v1/job/${name}`)
+  return data
+}

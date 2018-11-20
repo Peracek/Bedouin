@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types, Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
 export interface Template {
   id: string,
@@ -59,6 +59,4 @@ TemplateSchema.set('toObject', { virtuals: true })
 // })
 
 
-mongoose.model('Template', TemplateSchema)
-
-export default mongoose.model('Template')
+export default mongoose.model<TemplateDocument>('Template', TemplateSchema)

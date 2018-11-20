@@ -11,7 +11,8 @@ export type ApiClient = {
 
 const endpoint = {
   template: (id: string) => `/api/templates/${id}`,
-  templateParams: (id: string) => `/api/templates/${id}/parameters`
+  templateParams: (id: string) => `/api/templates/${id}/parameters`,
+  runTemplate: (id: string) => `/api/templates/${id}/run`
 }
 
 const normalizeParameterValues = (param: TemplateParameter) => {
@@ -40,8 +41,14 @@ export default (templateId: string): ApiClient => ({
       .post(endpoint.templateParams(templateId), parameters)
   },
 
-  runTemplate: (values: TODO) => {
-    console.log('mock of running template request', values)
-    return Promise.resolve('baf')
+  runTemplate: (values: { [key: string]: any }) => {
+    return axios
+      .post(endpoint.runTemplate(templateId), values)
+      // .then(response => {
+
+      // })
+      // .catch(err => {
+
+      // })
   }
 })

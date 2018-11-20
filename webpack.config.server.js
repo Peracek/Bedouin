@@ -14,7 +14,7 @@ module.exports = {
     .filter((folder) => ['.bin'].indexOf(folder) === -1)
     .reduce((acc, mod) => ({ ...acc, [mod]: `commonjs ${mod}` }), {}),
   
-  entry: './src/server/index.ts',
+  entry: path.resolve(__dirname, 'src/server/index.ts'),
 
   output: {
     path: path.resolve(__dirname, 'build'),
@@ -30,15 +30,18 @@ module.exports = {
         loader: 'awesome-typescript-loader',
         query: {
           configFileName: 'src/server/tsconfig.json',
-          reportFiles: ['src/backend/**/*.ts']
+          reportFiles: ['src/server/**/*.ts']
         }
       }
     ]
   },
 
   resolve: {
-    modules: ['node_modules', path.resolve(__dirname, 'src/server')],
-    extensions: ['.ts', 'tsx'],
+    modules: [
+      'node_modules',
+      path.resolve(__dirname, 'src/server')
+    ],
+    extensions: ['.ts', 'tsx', '.js'],
     plugins: [new TsconfigPathsPlugin({ configFile: "./src/server/tsconfig.json" })]
   },
 

@@ -9,7 +9,7 @@ const createFileFilter = (fieldName: string): FileFilter => (_, file, cb) => {
   console.log(file)
   var ext = path.extname(file.originalname);
   if(ext !== '.m' && ext !== '.nomad') {
-    const err = new APIError(APIErrorType.TEMPLATE_FILE_BAD_EXTENSION, 422, { field: fieldName })
+    const err = new APIError({ apiErrortype: APIErrorType.TEMPLATE_FILE_BAD_EXTENSION, status: 422, params: { field: fieldName }})
     return cb(err, false)
   }
   cb(null, true)
