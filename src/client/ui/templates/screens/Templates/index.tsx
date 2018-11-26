@@ -1,6 +1,7 @@
 import React from 'react'
 import { createComposer } from 'recompost'
 // import { RouteComponentProps } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 
 import TemplatesApi, { TemplateApiBag } from '../../containers/TemplatesApi'
 import TemplateList from './components/TemplateList'
@@ -22,7 +23,7 @@ const Templates = enhance(({ upload, showUploadForm, templatesApi: { templates, 
   if(upload) {
     uploadSection = <TemplateUpload handleTemplateUpload={uploadTemplate} />
   } else {
-    uploadSection = <button onClick={() => showUploadForm(true)}>add new template</button>
+    uploadSection = <Button onClick={() => showUploadForm(true)} color="primary">add new template</Button>
   }
 
   return (
