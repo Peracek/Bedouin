@@ -1,13 +1,14 @@
 import React from 'react'
 
 import { Template } from '@shared/types/Template'
-import { fetchTemplates, uploadTemplate } from './apiClient'
+// import { fetchTemplates, uploadTemplate } from './apiClient'
+import { templatesApi, TemplatesApi as TemplatesApiSchema } from 'apiClient'
 
 export type TemplateApiBag = {
   templatesApi: {
     templates?: Template[]
     fetching: boolean
-    uploadTemplate: typeof uploadTemplate
+    uploadTemplate: TemplatesApiSchema['upload']
   }
 }
 type Props = {
@@ -22,20 +23,20 @@ class TemplatesApi extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    fetchTemplates()
+    templatesApi.fetch()
       .then(templates => this.setState({ templates }))
   }
 
   render() {
     const { templates } = this.state
     const fetching = !Boolean(templates)
-    const templatesApi = {
+    const templatesApiBag = {
       templates,
       fetching,
-      uploadTemplate
+      uploadTemplate: templatesApi.upload
     }
 
-    return this.props.children({ templatesApi })
+    return this.props.children({ templatesApi: templatesApiBag })
   }
 } 
 

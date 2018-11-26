@@ -1,8 +1,13 @@
 import express from 'express'
 
-import { getJob } from '../../nomadClient'
+import { getJob, getJobs } from '../../nomadClient'
 
 const router = express.Router()
+
+router.get('/', async (req, res) => {
+  const data = await getJobs()
+  res.json(data)
+})
 
 router.get('/:name', async (req, res) => {
   const name = req.param('name')

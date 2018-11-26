@@ -3,6 +3,7 @@ import { Link, Route } from 'react-router-dom'
 
 import Templates from './templates/screens/Templates'
 import TemplateDetail from './templates/screens/TemplateDetail'
+import Jobs from './jobs/screens/Jobs'
 
 export const routes = [
   {
@@ -23,6 +24,12 @@ export const routes = [
     exact: false,
     component: TemplateDetail
   },
+  {
+    path: '/jobs',
+    name: 'jobs',
+    exact: true,
+    component: Jobs
+  }
 ]
 
 class App extends React.Component {
@@ -32,7 +39,9 @@ class App extends React.Component {
         <div>
           <Link to="/templates">Templates</Link>
           <br />
-          <Link to="/upload">New template</Link>
+          <Link to="/jobs">Jobs</Link>
+          <br />
+          <br />
         </div>
         {routes.map(route => 
           <Route key={route.name} {...route} />
