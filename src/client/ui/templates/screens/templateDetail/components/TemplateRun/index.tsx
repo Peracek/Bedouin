@@ -15,7 +15,7 @@ const initializeValues = (parameters: TemplateParameter[]) => {
 
 type Props = {
   template: Template
-  handleRun: (parameterValues: TODO) => Promise<{}>
+  handleRun: (parameterValues: TODO) => Promise<void>
 }
 class TemplateRun extends React.Component<Props> {
   ref = React.createRef<Formik<any, any>>()

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import JobsApi, { JobsApiBag } from '../../containers/JobsApi'
 
@@ -10,7 +11,7 @@ const Jobs = ({ fetching, jobs }: Props) => {
   }
 
   return <div>{jobs.map(job => (
-    <div key={job.ID}>{job.Name}</div>
+    <div key={job.ID}><Link to={`/jobs/${job.ID}`}>{job.Name}</Link></div>
   ))}</div>
 }
 

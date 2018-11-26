@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Job from '@shared/types/Job'
-import { getJobs } from './apiClient'
+import { jobsApi } from 'apiClient'
 
 
 export type JobsApiBag = {
@@ -22,7 +22,7 @@ class JobsApi extends React.Component<Props, State> {
   } as State
 
   componentDidMount() {
-    getJobs().then(jobs => {
+    jobsApi.fetch().then(jobs => {
       this.setState({ jobs, fetching: false })
     })
   }
