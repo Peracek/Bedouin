@@ -1,18 +1,18 @@
 import React from 'react'
-import { Formik, FormikActions, FastField } from 'formik'
+import { Formik, FormikActions } from 'formik'
 
 import { TemplateParameter } from '@shared/types/Template'
-import { RichTextField } from '@components/formFields/TextField'
-
+import TextField from '@components/formFields/TextField'
+import createSchema from './schema'
 
 const ParameterFields = ({ index }: { index: number }) => {
   return (
     <>
-      <RichTextField label="label" name={`p.[${index}].label`} />
-      <RichTextField label="description" name={`p.[${index}].description`} />
-      <RichTextField label="type" name={`p.[${index}].type`} />
-      <RichTextField label="regex to match" name={`p.[${index}].match`} />
-      <RichTextField label="default value" name={`p.[${index}].defaultValue`} />
+      <TextField label="label" name={`p.[${index}].label`} />
+      <TextField label="description" name={`p.[${index}].description`} />
+      <TextField label="type" name={`p.[${index}].type`} />
+      <TextField label="regex to match" name={`p.[${index}].match`} />
+      <TextField label="default value" name={`p.[${index}].defaultValue`} />
     </>
   )
 }
@@ -41,16 +41,17 @@ type Props = {
   // initialValues: TODO,
   handleSubmit: TODO
 }
-const Form = (props: Props) => {
+const Form = ({ parameters, handleSubmit }: Props) => {
   const initialValues = {
-    p: props.parameters.map(p => initializeEmptyProps(p))
+    p: parameters.map(p => initializeEmptyProps(p))
   }
+  const schema = createSchema(parameters.map(({ word }) => word)) // FIXME: toto nebude sedet na formik fieldy name
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values, actions: FormikActions<any>) => {
-        const isOk = props.handleSubmit(values.p)
+        const isOk = handleSubmit(values.p)
         if(isOk) {
           actions.setSubmitting(false)
         }
@@ -58,7 +59,7 @@ const Form = (props: Props) => {
     >
       {formProps => (
         <form onSubmit={formProps.handleSubmit}>
-          {renderFields(props.parameters)}
+          {renderFields(parameters)}
           <button type="submit">save</button>
         </form>
       )}

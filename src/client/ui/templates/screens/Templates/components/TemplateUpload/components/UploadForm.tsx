@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { withFormik, Formik, Field, FormikProps, FormikBag } from 'formik'
 
-import { RichTextField } from '@components/formFields/TextField'
+import TextField from '@components/formFields/TextField'
 
 import { isAPIFormErrorBody } from '@shared/types/APIErrorBody';
 import richField from '@components/formFields/richField';
@@ -39,7 +39,7 @@ const Form = (props: FormProps) => (
     }}
     render={formikProps => (
       <form onSubmit={formikProps.handleSubmit}>
-        <RichTextField name="name" label="Name" />
+        <TextField name="name" label="Name" />
         <RichFileInput name="file" label="Template" handleFileChange={e => {formikProps.setFieldValue('file', ''); props.handleFileChange(e)}} />
         <button type="submit">Submit</button>
       </form>

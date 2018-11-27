@@ -1,14 +1,20 @@
-import * as React from 'react'
-import { FastField } from 'formik'
+import React from 'react'
+import { FastField, FastFieldProps} from 'formik'
 
-import richField from './richField'
+import MaterialTextField from '@material-ui/core/TextField'
 
-const TextField = (props: TODO) => (
-  <FastField
-    name={props.name}
-    component="input"
-    type="text" />
-)
+type Props = {
+  name: string
+  label?: string
+}
+const TextField = ({ label, name }: Props) => {
+  return (
+    <FastField name={name} type="text">
+      {({ field }: FastFieldProps) => (
+        <MaterialTextField {...field} label={label} />
+      )}
+    </FastField>
+  )
+}
 
-export const RichTextField = richField(TextField)
 export default TextField
