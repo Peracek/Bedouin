@@ -6,4 +6,4 @@ mongoose.connect('mongodb://localhost:27017/no-mad', {
 
 
 
-// mongoose.set('debug', true)
+mongoose.set('debug', true)

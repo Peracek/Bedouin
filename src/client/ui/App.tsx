@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, Route } from 'react-router-dom'
+import { mapValues } from 'lodash'
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -7,43 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import Drawer from '@material-ui/core/Drawer'
 import { withStyles, Theme, WithStyles } from '@material-ui/core/styles'
 
-import Templates from './templates/screens/Templates'
-import TemplateDetail from './templates/screens/TemplateDetail'
-import Jobs from './jobs/screens/Jobs'
-import JobDetail from './jobs/screens/JobDetail'
+import routes from './routes'
 
-export const routes = [
-  {
-    path: '/',
-    name: 'index',
-    exact: true,
-    component: () => <div>Hello</div>
-  },
-  {
-    path: '/templates',
-    name: 'templates',
-    exact: true,
-    component: Templates,
-  },
-  {
-    path: '/templates/:id',
-    name: 'templateDetail',
-    exact: false,
-    component: TemplateDetail
-  },
-  {
-    path: '/jobs',
-    name: 'jobs',
-    exact: true,
-    component: Jobs
-  },
-  {
-    path: '/jobs/:id',
-    name: 'jobDetail',
-    exact: true,
-    component: JobDetail
-  }
-]
 
 const drawerWidth = 240
 
@@ -85,9 +51,11 @@ class App extends React.Component<WithStyles<typeof styles>> {
 
         <div className={classes.content}>
           <div className={classes.toolbar}></div>
-          {routes.map(route => 
-            <Route key={route.name} {...route} />
-          )}
+          <Route {...routes.index} />
+          <Route {...routes.templates} />
+          <Route {...routes.templateDetail} />
+          <Route {...routes.jobs} />
+          <Route {...routes.jobDetail} />
         </div>
       </div>
     )

@@ -67,8 +67,8 @@ export const getTemplate = (options: { id: string }) => {
   return TemplateModel.findById(options.id)
 }
 
-export const saveParameters = (parameters: TemplateParameter[], templateName: string) => {
-  return TemplateModel.updateOne({ name: templateName }, { $set: { parameters } })
+export const saveParameters = (parameters: TemplateParameter[], templateId: string) => {
+  return TemplateModel.findOneAndUpdate({ _id: templateId }, { $set: { parameters } })
 }
 
 export const runTempate = async (templateId: string, values?: { [key: string]: any }) => {

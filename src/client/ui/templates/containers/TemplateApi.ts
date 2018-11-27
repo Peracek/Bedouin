@@ -4,39 +4,53 @@ import { Template } from '@shared/types/Template'
 import { templateApi, TemplateApi as TemplateApiSchema } from 'apiClient' 
 
 export type TemplateApiBag = { 
-  template?: Template, 
-  fetching: boolean,
-  postParameters: TemplateApiSchema['postParameters'],
+  template?: Template
+  fetching: boolean
+  postParameters: TemplateApiSchema['postParameters']
   runTemplate: TemplateApiSchema['runTemplate']
 }
 type Props = { templateId: string, children: (props: { templateApi: TemplateApiBag }) => JSX.Element }
-type State = { template?: Template }
+type State = { fetching: boolean, template?: Template }
 
 
 class TemplateApi extends React.Component<Props, State> {
   state = {
-    template: undefined
-  }
+    fetching: true
+  } as State
   apiClient: TemplateApiSchema = templateApi(this.props.templateId)
 
   componentDidMount() {
-    this.apiClient.fetch()
-      .then(template => {
-        this.setState({ template })
-      })
+    this.fetch()
   }
 
   render() {
     const { template } = this.state
     const fetching = !Boolean(template)
+    const postParameters: TemplateApiSchema['postParameters'] = values => (
+      this.apiClient.postParameters(values).then(() => {
+        this.fetch()
+        return
+      })
+    )
     const templateApi = {
       template,
       fetching,
-      postParameters: this.apiClient.postParameters,
+      postParameters,
       runTemplate: this.apiClient.runTemplate
     
     }
     return this.props.children({ templateApi })
+  }
+
+  fetch() {
+    this.setState({ fetching: true })
+    this.apiClient.fetch()
+      .then(template => {
+        this.setState({
+          template,
+          fetching: false
+        })
+      })
   }
 }
 

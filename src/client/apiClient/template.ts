@@ -1,20 +1,8 @@
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { AxiosInstance } from 'axios'
 
 import { Template, TemplateParameter } from '@shared/types/Template'
-import { mapValues, trim } from 'lodash'
-
+import normalize from '@utils/normalizeFormValues'
 import { Routes } from '.'
-
-
-const normalizeParameterValues = (param: TemplateParameter) => {
-  return mapValues(param, val => {
-    if(typeof val === 'string') {
-      const trimmed = trim(val)
-      return trimmed.length === 0 ? null : trimmed
-    }
-    return val
-  }) as TemplateParameter
-}
 
 
 export type TemplateApi = {
@@ -32,9 +20,11 @@ export default (routes: Routes, client: AxiosInstance) =>
     }
 
     const postParameters: TemplateApi['postParameters'] = async parameters => {
-      parameters.map(p => normalizeParameterValues(p))
+      const body = { 
+        parameters: parameters.map(p => normalize(p))
+      }
       await client
-        .post(routes.templateParams(templateId), parameters)
+        .post(routes.templateParams(templateId), body)
       return
     }
 

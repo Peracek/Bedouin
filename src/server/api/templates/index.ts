@@ -1,7 +1,7 @@
 import express, { RequestHandler, ErrorRequestHandler } from 'express'
 
 import { APIError } from '@common/APIError'
-import { TemplateParameter } from '@model/Template';
+import { TemplateParametersDTO } from '@shared/types/Template'
 
 import { 
   // isNameUnique,
@@ -32,10 +32,12 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/:id/parameters', async (req, res) => {
-  const { name } = req.params
-  const parameters = req.body as TemplateParameter[]
-  saveParameters(parameters, name)
-    .then(() => {
+  const { id } = req.params
+  const { parameters } = req.body as TemplateParametersDTO
+  debugger
+  saveParameters(parameters, id)
+    .then((mon) => {
+      debugger
       res.sendStatus(200)
     })
     .catch(() => {
