@@ -21,9 +21,17 @@ class JobsApi extends React.Component<Props, State> {
     fetching: true
   } as State
 
+  // FIXME: move this to separate and preferably more generic file
+  ws = new WebSocket('ws://localhost:9000/api/jobs')
+
   componentDidMount() {
     jobsApi.fetch().then(jobs => {
       this.setState({ jobs, fetching: false })
+    })
+
+    this.ws.addEventListener('message', event => {
+      const jobs = JSON.parse(event.data) as Job[]
+      this.setState({ jobs })
     })
   }
 

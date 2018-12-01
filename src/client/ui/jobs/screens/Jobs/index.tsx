@@ -11,7 +11,7 @@ const Jobs = ({ fetching, jobs }: Props) => {
   }
 
   return <div>{jobs.map(job => (
-    <div key={job.ID}><Link to={`/jobs/${job.ID}`}>{job.Name}</Link></div>
+    <div key={job.ID}><Link to={`/jobs/${job.ID}`}>{job.Name}</Link><span>{job.Status}</span></div>
   ))}</div>
 }
 
