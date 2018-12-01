@@ -1,7 +1,3 @@
-type Job = {
-  ID: string
-  Name: string
-  Status: string // FIXME: 'pending' | '...' | '...'
-}
+import { Job } from '../../server/nomadClient/types'
 
 export default Job

@@ -7,4 +7,3 @@ export class AppError extends Error {
   }
 }
 
-export class NomadError extends AppError {}

@@ -8,8 +8,7 @@ import './mongoose'
 let app = express()
 expressWs(app)
 // NOTE: this has to be after app's websocket initialization
-import templatesRouter from './api/templates'
-import jobsRouter from './api/jobs'
+import { templatesRouter, jobsRouter, allocationsRouter } from './api'
 
 const port = 3001
 
@@ -28,24 +27,9 @@ app.use(express.json())
 
 app.use('/api/templates', templatesRouter)
 app.use('/api/jobs', jobsRouter)
-
-// app.use(((err, req, res, _) => {
-//   if(isAPIError(err)) {
-//     res.status(err. || 400)
-//     res.send(err.toJSON())
-//   }
-
-
-//   if(err instanceof APIError) {
-//     res.status(err.httpCode || 400)
-//     res.send(err.toJSON())
-//   } else {
-//     res.sendStatus(500)
-//   }
-// }) as ErrorRequestHandler)
+app.use('/api/allocations', allocationsRouter)
 
 app.get('/api/', (_, res) => res.send('Hello World!'))
 
 app.listen(port, () => log('info', `No-mad app listening on port ${port}!`))
 
-//docker container start 789e323c20cb

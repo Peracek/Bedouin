@@ -1,18 +1,17 @@
 import express from 'express'
 
-import { getJob, getJobs } from '../../nomadClient'
-import { obs } from '../../nomadClient/jobs'
+import { jobs } from '../../nomadClient'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  const data = await getJobs()
+router.get('/', async (_, res) => {
+  const data = await jobs.getAll()
   // poslat res.location() kde budou websocketi updates?
   res.json(data)
 })
 
-router.ws('/', async (ws, req) => {
-  const subscription = obs.subscribe({
+router.ws('/', async (ws) => {
+  const subscription = jobs.getAllObservable.subscribe({
     next(jobs) {
       ws.send(JSON.stringify(jobs))
     },
@@ -31,7 +30,7 @@ router.ws('/', async (ws, req) => {
 
 router.get('/:name', async (req, res) => {
   const name = req.param('name')
-  const data = await getJob(name)
+  const data = await jobs.get(name)
   res.json(data)
 })
 

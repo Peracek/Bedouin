@@ -1,0 +1,1 @@
+export class NomadError extends Error {}

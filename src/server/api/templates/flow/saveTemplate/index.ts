@@ -3,9 +3,8 @@ import { Observable, Observer } from 'rxjs'
 import { Template } from '@model/index'
 import ProcessingMessage, { Event } from '@shared/types/ProcessingMessage'
 import { log } from '@common/logger'
-
+import { jobs } from 'nomadClient'
 import parseParams from './parseParams'
-import nomadParse from './nomadParse'
 import saveToDb from './saveToDb'
 
 
@@ -23,7 +22,7 @@ const saveTemplate = (template: Partial<Template>) => {
 
     try {
       observer.next({ event: Event.NOMAD_PARSE, status: 'start' })
-      template.jobJSON = await nomadParse(template.jobHCL!)
+      template.jobJSON = await jobs.parse(template.jobHCL!)
       observer.next({ event: Event.NOMAD_PARSE, status: 'end' })
     } catch(err) {
       log('error', err)
