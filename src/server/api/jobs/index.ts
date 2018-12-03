@@ -11,7 +11,7 @@ router.get('/', async (_, res) => {
 })
 
 router.ws('/', async (ws) => {
-  const subscription = jobs.getAllObservable.subscribe({
+  const subscription = jobs.observeAll().subscribe({
     next(jobs) {
       ws.send(JSON.stringify(jobs))
     },

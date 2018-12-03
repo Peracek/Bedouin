@@ -1,7 +1,7 @@
-import { Observable, Observer } from 'rxjs'
+// import { Observable, Observer } from 'rxjs'
 
 import Job from './types/Job'
-import http from './http'
+import http, { observe } from './http'
 import routes from './routes'
 
 
@@ -13,33 +13,9 @@ export const getAll = () => {
   return http.get<Job[]>(routes.jobs)
 }
 
-const getChange = async (index: number) => {
-  const response = await http.get<Job[]>(routes.jobs, {
-    params: {
-      index,
-      wait: '10s'
-    }
-  })
-
-  const { headers, data } = response
-  const newIndex = +headers['x-nomad-index']
-
-  return { index: newIndex, data }
+export const observeAll = () => {
+  return observe<Job[]>(routes.jobs)
 }
-
-export const getAllObservable = new Observable((observer: Observer<Job[]>) => {
-  let lastIndex = 0
-  const fn = async () => {
-    while(!observer.closed) {
-      const { index, data } = await getChange(lastIndex)
-      if(lastIndex !== index) {
-        observer.next(data)
-      }
-      lastIndex = index
-    }
-  }
-  fn()
-})
 
 /** parse HCL to JSON */
 export const parse = async (jobHCL: string) => {
