@@ -5,13 +5,13 @@ import { allocations } from 'nomadClient'
 const router = express.Router()
 
 router.get('/', async (_, res) => {
-  const data = await allocations.getAll()
+  const { data } = await allocations.getAll()
   res.json(data)
 })
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params
-  const data = await allocations.get(id)
+  const { data } = await allocations.get(id)
   res.json(data)
 })
 

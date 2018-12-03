@@ -5,7 +5,7 @@ import { jobs } from '../../nomadClient'
 const router = express.Router()
 
 router.get('/', async (_, res) => {
-  const data = await jobs.getAll()
+  const { data } = await jobs.getAll()
   // poslat res.location() kde budou websocketi updates?
   res.json(data)
 })
@@ -30,7 +30,7 @@ router.ws('/', async (ws) => {
 
 router.get('/:name', async (req, res) => {
   const name = req.param('name')
-  const data = await jobs.get(name)
+  const { data } = await jobs.get(name)
   res.json(data)
 })
 
