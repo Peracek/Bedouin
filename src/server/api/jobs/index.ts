@@ -10,7 +10,7 @@ router.get('/', async (_, res) => {
   res.json(data)
 })
 
-router.ws('/', async (ws) => {
+router.ws('/', (ws) => {
   const subscription = jobs.observeAll().subscribe({
     next(jobs) {
       ws.send(JSON.stringify(jobs))
