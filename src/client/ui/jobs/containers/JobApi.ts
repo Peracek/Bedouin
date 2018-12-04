@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Job from '@shared/types/Job'
+import Allocation from '@shared/types/Allocation'
 import { jobApi, JobApi as JobApiSchema } from 'apiClient'
 
 type JobApiBag = State
@@ -11,18 +12,27 @@ type Props = {
 type State = {
   fetching: boolean
   job?: Job
+  allocations: Allocation[]
 }
 class JobApi extends React.Component<Props, State> {
   state = {
-    fetching: true
+    fetching: true,
+    allocations: []
   } as State
 
   jobApi: JobApiSchema = jobApi
+  ws = new WebSocket(`ws://localhost:9000/api/allocations?job=${this.props.jobId}`)
 
-  async componentDidMount() {
+  componentDidMount() {
     const { jobId } = this.props
-    const job = await jobApi.fetch(jobId)
-    this.setState({ job, fetching: false })
+    jobApi.fetch(jobId)
+      .then(job => {
+        this.setState({ job, fetching: false })
+      })
+    this.ws.addEventListener('message', event => {
+      const allocations = JSON.parse(event.data) as Allocation[]
+      this.setState({ allocations })
+    })
   }
 
   render() {

@@ -2,19 +2,25 @@ import React from 'react'
 
 import Job from '@shared/types/Job'
 import JobApi from 'ui/jobs/containers/JobApi'
+import Allocation from '@shared/types/Allocation'
+
+import JobAllocations from './components/JobAllocations'
 
 
 type Props = {
-  fetching: boolean,
+  fetching: boolean
   job?: Job
+  allocations: Allocation[]
 }
-const JobDetail = ({ fetching, job }: Props) => {
+const JobDetail = ({ fetching, job, allocations }: Props) => {
   if(fetching) {
     return <span>fetching...</span>
   }
   return (
     <div>
-      {JSON.stringify(job!)}
+      <div>{job!.Name}</div>
+      <div>{job!.Status}</div>
+      <JobAllocations allocations={allocations} />
     </div>
   )
 }
@@ -28,7 +34,7 @@ const JobDetailScreen = (props: ScreenProps) => {
 
   return (
     <JobApi jobId={id}>
-      {({ jobApi: { fetching, job } }) => <JobDetail fetching={fetching} job={job} />}
+      {({ jobApi }) => <JobDetail {...jobApi} />}
     </JobApi>
   )
 }
