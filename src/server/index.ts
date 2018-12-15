@@ -31,5 +31,5 @@ app.use('/api/allocations', allocationsRouter)
 
 app.get('/api/', (_, res) => res.send('Hello World!'))
 
-app.listen(port, () => log('info', `No-mad app listening on port ${port}!`))
+app.listen(port, () => log('info', `Bedouin app listening on port ${port}!`))
 
