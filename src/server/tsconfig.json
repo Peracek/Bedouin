@@ -3,6 +3,7 @@
     "target": "es6",
     "module": "commonjs",        
     "allowJs": true,                       /* Allow javascript files to be compiled. */
+    "resolveJsonModule": true,
     "checkJs": false,           
     "outDir": "../../build/server",             
     "strict": true,                 

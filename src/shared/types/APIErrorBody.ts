@@ -1,6 +1,7 @@
 import { includes } from 'lodash'
 
 export enum APIErrorType {
+  FILE_OR_DIRECTORY_NOT_FOUND = "file_or_directory_not_found",
   TEMPLATE_NAME_NOT_UNIQUE = "template_name_not_unique",
   TEMPLATE_FILE_BAD_EXTENSION = "template_file_bad_extension",
   TEMPLATE_PARSE_ERROR = "template_parse_error",
