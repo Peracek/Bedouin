@@ -1,14 +1,14 @@
 import { AxiosInstance } from 'axios'
 
-import { Template, TemplateParameter } from '@shared/types/Template'
-import normalize from '@utils/normalizeFormValues'
+import { Template } from '@shared/types/Template'
+import TemplateDeployDTO from '@shared/types/TemplateDeployDTO'
+import APIError from './APIError'
 import { Routes } from '.'
 
 
 export type TemplateApi = {
   fetch: () => Promise<Template>
-  postParameters: (parameters: TemplateParameter[]) => Promise<void>
-  runTemplate: (values: { [key: string]: any }) => Promise<void>
+  deployTemplate: (values: { [key: string]: any }) => Promise<string>
 }
 export default (routes: Routes, client: AxiosInstance) => 
   (templateId: string) => {
@@ -19,24 +19,25 @@ export default (routes: Routes, client: AxiosInstance) =>
       return data
     }
 
-    const postParameters: TemplateApi['postParameters'] = async parameters => {
-      const body = { 
-        parameters: parameters.map(p => normalize(p))
+    const deployTemplate: TemplateApi['deployTemplate'] = async values => {
+      let jobName: string
+      try {
+        const { data } = await client
+          .post<TemplateDeployDTO>(routes.deployTemplate(templateId), values)
+        jobName = data.jobName
+      } catch(err) {
+        if(err.response) {
+          if(APIError.isAPIErrorBody(err.response.data)) {
+            throw new APIError(err.response.data)
+          }
+        }
+        throw err
       }
-      await client
-        .post(routes.templateParams(templateId), body)
-      return
-    }
-
-    const runTemplate: TemplateApi['runTemplate'] = async values => {
-      await client
-        .post(routes.runTemplate(templateId), values)
-      return
+      return jobName
     }
 
     return {
       fetch,
-      postParameters,
-      runTemplate
+      deployTemplate
     }
   }

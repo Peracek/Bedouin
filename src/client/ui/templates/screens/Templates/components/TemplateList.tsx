@@ -1,17 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Template } from '@shared/types/Template'
+import { TemplateDir } from '@shared/types/TemplateDir'
 // import { routes } from 'ui/App'
 
-const renderTemplate = (t: Template) => (
-  <div key={t.name}>
-    <Link to={`/templates/${t.id}`}>{t.name}</Link>
+const renderTemplate = (t: TemplateDir) => (
+  <div key={t.dirPath}>
+    <Link to={`/templates/${t.dirPath}`}>{t.dirPath}</Link>
   </div>
 )
 
 type Props = {
-  templates: Template[]
+  templates: TemplateDir[]
 }
 const TemplateList = ({ templates }: Props) => {
   if(templates.length === 0) {

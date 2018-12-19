@@ -1,21 +1,19 @@
 import React from 'react'
 
-import { Template } from '@shared/types/Template'
-// import { fetchTemplates, uploadTemplate } from './apiClient'
+import { TemplateDir } from '@shared/types/TemplateDir'
 import { templatesApi, TemplatesApi as TemplatesApiSchema } from 'apiClient'
 
 export type TemplateApiBag = {
   templatesApi: {
-    templates?: Template[]
+    templates?: TemplateDir[]
     fetching: boolean
-    uploadTemplate: TemplatesApiSchema['upload']
   }
 }
 type Props = {
   children: (props: TemplateApiBag) => JSX.Element
 }
 type State = {
-  templates?: Template[]
+  templates?: TemplateDir[]
 }
 class TemplatesApi extends React.Component<Props, State> {
   state = {
@@ -33,7 +31,6 @@ class TemplatesApi extends React.Component<Props, State> {
     const templatesApiBag = {
       templates,
       fetching,
-      uploadTemplate: templatesApi.upload
     }
 
     return this.props.children({ templatesApi: templatesApiBag })

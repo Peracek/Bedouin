@@ -1,6 +1,16 @@
-import { toPairs } from 'lodash'
+import { join } from 'path'
+import { flow, map, fromPairs } from 'lodash/fp'
 
+import { log } from 'common/logger'
+import { parseConfig, renderTemplate } from 'template-utils'
 import { readFileSync } from './fileBrowser'
+
+export type ParameterSpec = {
+  Name: string
+  DeclaredType: string
+  Default: string
+  Description: string
+}
 
 const validateBrackets = (template: string) => {
   let valid = true
@@ -27,17 +37,18 @@ const validateBrackets = (template: string) => {
   return valid
 }
 
-
 class TemplateDefinition {
 
-  templatePath: string
-  paramsPath?: string
+  dirPath: string
+  templateName: string
+  paramsName?: string
 
-  constructor(templatePath: string, paramsPath?: string) {
+  constructor(dirPath: string, templateName: string, paramsName?: string) {
     //TODO: validate here?
 
-    this.templatePath = templatePath
-    this.paramsPath = paramsPath
+    this.dirPath = dirPath
+    this.templateName = templateName
+    this.paramsName = paramsName
   }
 
   validate() {
@@ -47,22 +58,38 @@ class TemplateDefinition {
   }
 
   get templateSpec() {
-    return readFileSync(this.templatePath)
+    return readFileSync(join(this.dirPath, this.templateName))
   }
 
-  get paramsSpec() {
-    if(!this.templatePath) return
-    return readFileSync(this.templatePath)
+  get paramsSpec(): ParameterSpec[] {
+    if(!this.paramsName) return []
+    const paramsRaw = readFileSync(join(this.dirPath, this.paramsName))
+    return parseConfig(paramsRaw)
   }
 
-  render(paramValues: { [key: string]: any }) {
-    let jobSpec = this.templateSpec
+  render(incomingValues: { [key: string]: any }) {
+    if(!this.paramsName) {
+      return this.templateSpec
+    }
 
-    toPairs(paramValues)
-      .map(([ key, value ]) => {
-        const re = new RegExp(`\\[\\[ ${key} \\]\\]`, 'g')
-        jobSpec = jobSpec.replace(re, value)
-      })
+    const defaultValues = flow(
+      map<ParameterSpec, string[]>(p => [p.Name, p.Default]),
+      fromPairs
+    )(this.paramsSpec)
+
+    const values = {
+      ...defaultValues,
+      ...incomingValues
+    }
+
+    let rendered: string
+    try {
+      rendered = renderTemplate(this.templateSpec, values)
+    } catch(err) {
+      log('error', err)
+      throw err
+    }
+    return rendered
   }
 
 }

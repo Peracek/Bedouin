@@ -1,9 +1,8 @@
-import express from 'express'
+import express, { ErrorRequestHandler } from 'express'
 import expressWs from 'express-ws'
 
-import { log } from '@common/logger'
-
-import './mongoose'
+import { log } from 'common/logger'
+import { APIError } from 'api/APIError'
 
 let app = express()
 expressWs(app)
@@ -30,6 +29,14 @@ app.use('/api/jobs', jobsRouter)
 app.use('/api/allocations', allocationsRouter)
 
 app.get('/api/', (_, res) => res.send('Hello World!'))
+
+app.use(((err, req, res, next) => {
+  if(err instanceof APIError) {
+    res.status(err.status).json(err.body)
+    return
+  }
+  res.sendStatus(500)
+}) as ErrorRequestHandler)
 
 app.listen(port, () => log('info', `Bedouin app listening on port ${port}!`))
 

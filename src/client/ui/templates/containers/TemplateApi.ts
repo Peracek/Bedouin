@@ -6,8 +6,7 @@ import { templateApi, TemplateApi as TemplateApiSchema } from 'apiClient'
 export type TemplateApiBag = { 
   template?: Template
   fetching: boolean
-  postParameters: TemplateApiSchema['postParameters']
-  runTemplate: TemplateApiSchema['runTemplate']
+  deployTemplate: TemplateApiSchema['deployTemplate']
 }
 type Props = { templateId: string, children: (props: { templateApi: TemplateApiBag }) => JSX.Element }
 type State = { fetching: boolean, template?: Template }
@@ -26,17 +25,10 @@ class TemplateApi extends React.Component<Props, State> {
   render() {
     const { template } = this.state
     const fetching = !Boolean(template)
-    const postParameters: TemplateApiSchema['postParameters'] = values => (
-      this.apiClient.postParameters(values).then(() => {
-        this.fetch()
-        return
-      })
-    )
     const templateApi = {
       template,
       fetching,
-      postParameters,
-      runTemplate: this.apiClient.runTemplate
+      deployTemplate: this.apiClient.deployTemplate
     
     }
     return this.props.children({ templateApi })

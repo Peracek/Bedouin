@@ -11,7 +11,7 @@ const routes = {
   templates: `templates`,
   template: (id: string) => `templates/${id}`,
   templateParams: (id: string) => `templates/${id}/parameters`,
-  runTemplate: (id: string) => `templates/${id}/run`
+  deployTemplate: (id: string) => `templates/${id}/deploy`
 }
 const client = axios.create({
   baseURL: '/api'

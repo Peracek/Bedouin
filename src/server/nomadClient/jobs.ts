@@ -1,5 +1,8 @@
 // import { Observable, Observer } from 'rxjs'
+import { AxiosResponse } from 'axios'
 
+import { log } from 'common/logger'
+import { NomadError } from './NomadError'
 import Job from './types/Job'
 import http, { observe } from './http'
 import routes from './routes'
@@ -19,19 +22,47 @@ export const observeAll = () => {
 
 /** parse HCL to JSON */
 export const parse = async (jobHCL: string) => {
-  let jobJSON: string
-  const response = await http
-    .post(
-      routes.jobsParse, 
-      { JobHCL: jobHCL },
-      {
-        responseType: 'json',
-        transformResponse: res => res
-      }
+  let response: AxiosResponse<{[key: string]: any}>
+  try {
+    response = await http
+      .post(
+        routes.jobParse, 
+        { JobHCL: jobHCL },
+        {
+          responseType: 'json'
+        }
+      )
+  } catch(err) {
+    if(err.response) {
+      log('error', err.response.headers)
+      log('error', err.response.data)
+      throw new NomadError()
+    }
+    log('error', err)
+    throw err
+  }
+  const job = response.data
+  return job
+}
+
+export const deploy = async (jobName: string, jobBody: object) => {
+  const payload = { job: jobBody }
+
+  try {
+    await http.post(
+      routes.jobDeploy(jobName),
+      payload
     )
-  
-  jobJSON = response.data
-  return jobJSON
+  } catch(err) {
+    if(err.response) {
+      log('error', err.response.headers)
+      log('error', err.response.data)
+      throw new NomadError()
+    }
+    log('error', err)
+    throw err
+  }
+  return
 }
 
 

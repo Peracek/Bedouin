@@ -5,8 +5,8 @@
  */
 type Key = string | number;
 
-declare namespace NodeCache {
-	interface NodeCache<T> {
+declare module "node-cache" {
+	interface INodeCache<T> {
 		/** container for cached data */
 		data: Data<T>;
 
@@ -150,16 +150,12 @@ declare namespace NodeCache {
 	}
 
 	type Callback<T> = (err: any, data: T | undefined) => void;
-}
+
 
 import events = require("events");
 
-import Data = NodeCache.Data;
-import Options = NodeCache.Options;
-import Stats = NodeCache.Stats;
-import Callback = NodeCache.Callback;
 
-declare class NodeCache<T> extends events.EventEmitter implements NodeCache.NodeCache<T> {
+class NodeCache<T> extends events.EventEmitter implements INodeCache<T> {
 	/** container for cached data */
 	data: Data<T>;
 
@@ -275,3 +271,4 @@ declare class NodeCache<T> extends events.EventEmitter implements NodeCache.Node
 }
 
 export = NodeCache;
+}

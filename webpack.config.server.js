@@ -11,6 +11,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   externals: fs
     .readdirSync('node_modules')
+    .concat(fs.readdirSync('gopher-transpiled'))
     .filter((folder) => ['.bin'].indexOf(folder) === -1)
     .reduce((acc, mod) => ({ ...acc, [mod]: `commonjs ${mod}` }), {}),
   
@@ -39,6 +40,7 @@ module.exports = {
   resolve: {
     modules: [
       'node_modules',
+      'gopher-transpiled',
       path.resolve(__dirname, 'src/server')
     ],
     extensions: ['.ts', 'tsx', '.js'],

@@ -1,10 +1,7 @@
 import React from 'react'
-import { Route } from 'react-router'
 
-import routes from 'ui/routes'
 import TemplateApi from "ui/templates/containers/TemplateApi"
 import TemplateDetail from './components/TemplateDetail'
-import TemplateRun from './components/TemplateRun'
 
 
 type Props = {
@@ -15,17 +12,10 @@ const TemplateDetailScreen = ({ match }: Props) => {
 
   return (
     <TemplateApi templateId={id}>
-      {({ templateApi: { fetching, template, postParameters, runTemplate } }) => {
+      {({ templateApi: { fetching, template, deployTemplate } }) => {
         if(fetching) return <></>
         return (
-          <div>
-            <Route path={url} exact render={() => (
-              <TemplateDetail template={template!} postParameters={postParameters} />
-            )} />
-            <Route path={routes.templateRun.path} render={() => (
-              <TemplateRun template={template!} handleRun={runTemplate} />
-            )} />
-          </div>
+          <TemplateDetail template={template!} deployTemplate={deployTemplate} />
         )
       }}
     </TemplateApi>

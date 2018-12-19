@@ -1,7 +1,11 @@
 
-import { getTemplateDirs } from './templateReader'
+import { 
+  getTemplate,
+  getTemplateDirs
+} from './templateReader'
 
 export { 
+  getTemplate,
   getTemplateDirs
 }
 
