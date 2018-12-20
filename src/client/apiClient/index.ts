@@ -7,7 +7,8 @@ import createJobApi, { JobApi } from './job'
 
 const routes = {
   jobs: `jobs`,
-  job: (id: string) => `jobs/${id}`,
+  // job: (id: string) => `jobs/${id}`,
+  deployments: (jobId: string) => `jobs/${jobId}/deployments`,
   templates: `templates`,
   template: (id: string) => `templates/${id}`,
   templateParams: (id: string) => `templates/${id}/parameters`,

@@ -1,8 +1,12 @@
 import Allocation from './Allocation'
-import Job from './Job'
+import JobSummary from './JobSummary'
+import Deployment from './Deployment'
+import JobVersion from './JobVersion'
 
 
 export {
   Allocation,
-  Job
+  JobSummary,
+  Deployment,
+  JobVersion
 }

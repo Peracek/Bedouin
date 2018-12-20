@@ -1,5 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { Observable, Observer } from 'rxjs'
+
+import { log } from 'common/logger'
+import { NomadError } from './NomadError'
 
 
 const baseURL = 'http://localhost:4646/v1' // TODO: move to config
@@ -48,6 +51,18 @@ const observe = <T>(url: string) => {
   })
 
   return observable
+}
+
+const isServerError = (err: any): err is AxiosError => {
+  return Boolean(err.response)
+}
+
+export const handleError = (err: any) => {
+  log('error', err)
+  if(isServerError(err)) {
+    throw new NomadError(err)
+  }
+  throw err
 }
 
 export { observe }

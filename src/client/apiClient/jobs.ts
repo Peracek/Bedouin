@@ -2,17 +2,17 @@ import { AxiosInstance, AxiosResponse } from 'axios'
 
 // import APIError from '@common/APIError'
 // import notify from '@common/notify'
-import Job from '@shared/types/Job'
+import JobSummary from '@shared/types/JobSummary'
 
 import { Routes } from '.'
 
 export type JobsApi = {
-  fetch: () => Promise<Job[]>,
+  fetch: () => Promise<JobSummary[]>,
 }
 export default (routes: Routes, client: AxiosInstance) => {
   
   const fetch: JobsApi['fetch'] = async () => {
-    const { data } = await client.get<Job[]>(routes.jobs)
+    const { data } = await client.get<JobSummary[]>(routes.jobs)
     return data
   }
 

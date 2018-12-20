@@ -1,18 +1,18 @@
 import React from 'react'
 
-import Job from '@shared/types/Job'
+import JobSummary from '@shared/types/JobSummary'
 import { jobsApi } from 'apiClient'
 
 
 export type JobsApiBag = {
-  jobs: Job[],
+  jobs: JobSummary[],
   fetching: boolean
 }
 type Props = {
   children: React.ComponentType<{ jobsApi: JobsApiBag }>
 }
 type State = {
-  jobs: Job[]
+  jobs: JobSummary[]
   fetching: boolean
 }
 class JobsApi extends React.Component<Props, State> {
@@ -30,7 +30,7 @@ class JobsApi extends React.Component<Props, State> {
     })
 
     this.ws.addEventListener('message', event => {
-      const jobs = JSON.parse(event.data) as Job[]
+      const jobs = JSON.parse(event.data) as JobSummary[]
       this.setState({ jobs })
     })
   }

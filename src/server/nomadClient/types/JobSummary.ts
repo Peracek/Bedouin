@@ -1,4 +1,4 @@
-type Job = {
+type JobSummary = {
   ID: string
   Name: string
   type: string // FIXME: 'service | '...'
@@ -15,4 +15,4 @@ type Job = {
   }
 }
 
-export default Job
+export default JobSummary
