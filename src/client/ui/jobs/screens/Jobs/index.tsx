@@ -1,13 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+import { CircularProgress } from '@material-ui/core'
+
 import JobsApi, { JobsApiBag } from '../../containers/JobsApi'
 
 
 type Props = JobsApiBag
 const Jobs = ({ fetching, jobs }: Props) => {
   if(fetching) {
-    return <span>spinna</span>
+    return <CircularProgress />
   }
 
   return <div>{jobs.map(job => (

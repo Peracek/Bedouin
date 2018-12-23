@@ -38,6 +38,10 @@ class JobApi extends React.Component<Props, State> {
     // })
   }
 
+  componentWillUnmount() {
+    this.ws.close()
+  }
+
   render() {
     const { children } = this.props
     return React.createElement(children, { jobApi: this.state })

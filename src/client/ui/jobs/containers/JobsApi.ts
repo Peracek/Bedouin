@@ -35,6 +35,10 @@ class JobsApi extends React.Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    this.ws.close()
+  }
+
   render() {
     const { children } = this.props
     const jobsApi = {

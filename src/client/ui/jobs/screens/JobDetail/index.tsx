@@ -3,8 +3,6 @@ import React from 'react'
 // import Job from '@shared/types/Job'
 import JobApi from 'ui/jobs/containers/JobApi'
 import Deployment from '@shared/types/Deployment'
-
-import JobAllocations from './components/JobAllocations'
 import JobDeployment from './components/JobDeployment'
 
 
@@ -17,7 +15,7 @@ const JobDetail = ({ fetching, jobId, deployments }: Props) => {
   if(fetching) {
     return <span>fetching...</span>
   }
-  const latestDeployment = deployments.sort((a, b) => a.JobVersion - b.JobVersion)[0]
+  const latestDeployment = deployments.sort((a, b) => b.JobVersion - a.JobVersion)[0]
 
   return (
     <div>

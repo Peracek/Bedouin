@@ -1,35 +1,37 @@
-import { Observable } from 'rxjs'
-import { distinctUntilChanged, map } from 'rxjs/operators'
+import { Observable, timer } from 'rxjs'
+import { flatMap } from 'rxjs/operators'
 
 import logger from 'common/logger'
-import Allocation from './types/Allocation'
-import http, { observe } from './http'
+import { Allocation, AllocationStats } from './types'
+import http, { observe, handleError } from './http'
 import routes from './routes'
 
 
-export const get = (id: string) => {
-  return http.get<Allocation>(routes.allocation(id))
+export const get = async (id: string) => {
+  try {
+    const { data } = await http.get<Allocation>(routes.allocation(id))
+    return data 
+  }
+  catch(err) {
+    throw handleError(err)
+  }
 }
 
 export const getAll = () => {
   return http.get<Allocation[]>(routes.allocations)
 }
 
-export const getOfJob = async (jobId: string) => {
-  const { data } = await getAll()
-  return data.filter(job => job.JobID === jobId)
+export const getOfDeployment = async (deplId: string) => {
+  try {
+    const { data } = await http.get<Allocation[]>(routes.allocationsOfDeployment(deplId))
+    return data
+  } catch(err) {
+    throw handleError(err)
+  }
 }
 
-/** calculates sum of modify indices of allocations in array */
-const modifyIndex = (allocs: Allocation[]) => allocs.reduce((acc, alloc) => acc += alloc.ModifyIndex, 0)
-export const observeOfJob = (jobId: string) => {
-  return observe<Allocation[]>(routes.allocations)
-    .pipe(
-      map(allocs => allocs.filter(alloc => {console.log(alloc.JobID, jobId); return alloc.JobID === jobId})),
-      distinctUntilChanged((allocsX, allocsY) => {
-        return modifyIndex(allocsX) === modifyIndex(allocsY)
-      })
-    )
+export const observeOfDeployment = (deplId: string) => {
+  return observe<Allocation[]>(routes.allocationsOfDeployment(deplId))
 }
 
 export const observeLogs = (allocId: string) => {
@@ -72,4 +74,14 @@ export const observeLogs = (allocId: string) => {
   })
   
   return observable
+}
+
+export const observeStats = (id: string) => {
+  return timer(0, 4000)
+    .pipe(
+      flatMap(async () => {
+        const { data } = await http.get<AllocationStats>(routes.allocationStats(id))
+        return data
+      })
+    )
 }

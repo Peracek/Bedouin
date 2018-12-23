@@ -14,7 +14,7 @@ import Allocation from '@shared/types/Allocation'
 type Props = {
   allocations: Allocation[]
 }
-const JobAllocations = ({ allocations }: Props) => {
+const AllocationsList = ({ allocations }: Props) => {
   return (
     <div>
       <Table>
@@ -42,4 +42,4 @@ const JobAllocations = ({ allocations }: Props) => {
   )
 }
 
-export default JobAllocations
+export default AllocationsList
