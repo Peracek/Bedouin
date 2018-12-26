@@ -2,6 +2,7 @@ import React from 'react'
 import { toPairs } from 'lodash'
 
 import { Paper, Grid, CircularProgress } from '@material-ui/core'
+import { withStyles, WithStyles } from '@material-ui/core/styles'
 
 import Deployment, { DeploymentTaskGroup } from '@shared/types/Deployment'
 import Allocation from '@shared/types/Allocation'
@@ -15,6 +16,18 @@ type ScreenContent = 'taskGroup' | 'allocation'
 const isAllocation = (entity: any): entity is Allocation => Boolean(entity.ID)
 const isTaskGroup = (entity: any): entity is DeploymentTaskGroup => Boolean(entity.PlacedAllocs)
 
+
+const styles = () => ({
+  groups: {
+    padding: '8px',
+    cursor: 'pointer'
+  },
+  allocationItem: {
+    padding: '8px',
+    cursor: 'pointer'
+  }
+})
+
 type Props = {
   deployment: Deployment
   allocations: Allocation[]
@@ -23,7 +36,15 @@ type Props = {
   handleAllocationClick(allocation: Allocation): void
   fetchingAllocs: boolean
 }
-const JobDeployment = ({ deployment, allocations, selectedEntity, fetchingAllocs, handleAllocationClick, handleTaskGroupClick }: Props) => {
+const JobDeployment = withStyles(styles)(({ 
+  deployment, 
+  allocations,
+  selectedEntity, 
+  fetchingAllocs, 
+  handleAllocationClick, 
+  handleTaskGroupClick, 
+  classes 
+}: Props & WithStyles<typeof styles>) => {
   if(fetchingAllocs) {
     return (
       <CircularProgress />
@@ -34,17 +55,23 @@ const JobDeployment = ({ deployment, allocations, selectedEntity, fetchingAllocs
   const tgs = taskGroups.map(([name, taskGroup]) => {
     const taskGroupAllocations = allocations.filter(a => a.TaskGroup === name)
     return (
-      <Paper onClick={() => handleTaskGroupClick(taskGroup)}>
-        {name}
-        <br />
-        <div>
-          {taskGroupAllocations.map(allocation => (
-            <div onClick={(e) => {handleAllocationClick(allocation); e.stopPropagation()}}>
-              <AllocationItem allocation={allocation} />
-            </div>
-          ))}
-        </div>
-      </Paper>
+      <Grid item style={{width: '100%'}}>
+        <Paper className={classes.groups} onClick={() => handleTaskGroupClick(taskGroup)}>
+          {name}
+          <br />
+          <Grid container direction='column' spacing={8}>
+            {taskGroupAllocations.map(allocation => (
+              <Grid item key={allocation.ID}>
+                <Paper 
+                  className={classes.allocationItem}
+                  onClick={(e) => {handleAllocationClick(allocation); e.stopPropagation()}}>
+                  <AllocationItem allocation={allocation} />
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      </Grid>
       // <div>{name}<br />{taskGroupAllocations.map(a => <div><span>{a.ID}</span><br /></div>)}</div>
     )
   })
@@ -53,7 +80,7 @@ const JobDeployment = ({ deployment, allocations, selectedEntity, fetchingAllocs
     <div>
       <Grid container spacing={40}>
         {/* left */}
-        <Grid item xs={4}>
+        <Grid item container xs={4} spacing={8}>
           {tgs}
         </Grid>
         {/* right */}
@@ -70,7 +97,7 @@ const JobDeployment = ({ deployment, allocations, selectedEntity, fetchingAllocs
       </Grid>
     </div>
   )
-}
+})
 
 
 type EnhanceProps = {

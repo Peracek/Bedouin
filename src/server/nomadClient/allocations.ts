@@ -1,7 +1,6 @@
 import { Observable, timer } from 'rxjs'
 import { flatMap } from 'rxjs/operators'
 
-import logger from 'common/logger'
 import { Allocation, AllocationStats } from './types'
 import http, { observe, handleError } from './http'
 import routes from './routes'
@@ -34,16 +33,17 @@ export const observeOfDeployment = (deplId: string) => {
   return observe<Allocation[]>(routes.allocationsOfDeployment(deplId))
 }
 
-export const observeLogs = (allocId: string) => {
+export const observeTaskLogs = (allocId: string, task: string) => {
   const observable = new Observable<string>(observer => {
     http.get(
       routes.allocationLogs(allocId), 
       { 
         responseType: 'stream',
         params: {
-          task: 'example', //FIXME: need to pass task name here
+          task,
           type: 'stdout',
           follow: true,
+          plain: true
         }
       }
     )
@@ -54,18 +54,7 @@ export const observeLogs = (allocId: string) => {
             stream.destroy()
           }
 
-          try {
-            const chunkObject = JSON.parse(chunk.toString())
-            const rawData = chunkObject.Data
-            if(rawData) {
-              const data = Buffer.from(rawData, 'base64').toString()
-              observer.next(data)
-            }
-          }
-          catch(err) {
-            logger.error(err)
-            observer.error()
-          }
+          observer.next(chunk.toString())
         })
         stream.on('end', () => {
           observer.complete()

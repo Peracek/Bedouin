@@ -15,7 +15,8 @@ export const routes = {
   templateParams: (id: string) => `templates/${id}/parameters`,
   deployTemplate: (id: string) => `templates/${id}/deploy`,
   allocations: (deplId: string) => `allocations?deployment=${deplId}`,
-  allocationStats: (id: string) => `allocations/${id}/stats`
+  allocationStats: (id: string) => `allocations/${id}/stats`,
+  allocationTaskLogs: (allocId: string, taskName: string) => `allocations/${allocId}/logs/${taskName}`
 }
 const client = axios.create({
   baseURL: '/api'

@@ -1,9 +1,11 @@
 import React from 'react'
 import { toPairs } from 'lodash'
+import { Link } from 'react-router-dom';
 
 import Allocation from '@shared/types/Allocation'
 import AllocationStats from '@shared/types/AllocationStats'
 import AllocationStatsApi from 'ui/jobs/containers/AllocationStatsApi'
+import Logs from './Logs'
 
 
 type Props = {
@@ -19,7 +21,11 @@ const AllocationDetail = ({ allocation, stats }: Props & EnhancedProps) => {
         Task: {taskName}
         <br />
         state: {task.State} | started at: {task.StartedAt}
-        <br /><br />
+        <br />
+        {/* <Link to={'todo'}>Logs</Link> */}
+        <Logs allocationId={allocation.ID} taskName={taskName} />
+        <br />
+        <br />
       </div>
     ))
 
@@ -37,7 +43,9 @@ const AllocationDetail = ({ allocation, stats }: Props & EnhancedProps) => {
         </div>
       )}
       <br />
-      <div>{taskStates}</div>
+      <div>
+        {taskStates}
+      </div>
     </div>
   )
 }

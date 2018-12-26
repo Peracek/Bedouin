@@ -28,9 +28,9 @@ router.ws('/', (ws, req) => {
   })
 })
 
-router.ws('/:id/logs', (ws, req) => {
-  const { id } = req.params
-  const observable = allocations.observeLogs(id)
+router.ws('/:id/logs/:task', (ws, req) => {
+  const { id, task } = req.params
+  const observable = allocations.observeTaskLogs(id, task)
   const subscription = observable.subscribe({
     next(logChunk) {
       ws.send(logChunk)

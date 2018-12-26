@@ -2,6 +2,7 @@ import React from 'react'
 import { Link, Route } from 'react-router-dom'
 import { mapValues } from 'lodash'
 
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -10,6 +11,16 @@ import { withStyles, Theme, WithStyles } from '@material-ui/core/styles'
 
 import routes from './routes'
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#e5a235',
+      main: '#ffffff',
+      dark: '#e1be4a',
+      // contrastText?: string
+    }
+  }
+})
 
 const drawerWidth = 240
 
@@ -35,7 +46,7 @@ class App extends React.Component<WithStyles<typeof styles>> {
     const { classes } = this.props
 
     return (
-      <div>
+      <MuiThemeProvider theme={theme}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" color="inherit">
@@ -57,7 +68,7 @@ class App extends React.Component<WithStyles<typeof styles>> {
           <Route {...routes.jobs} />
           <Route {...routes.jobDetail} />
         </div>
-      </div>
+      </MuiThemeProvider>
     )
   }
 }
