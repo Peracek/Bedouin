@@ -57,6 +57,7 @@
     "recompost": "^1.6.0",
     "rxjs": "^6.3.3",
     "template-utils": "file:gopher-transpiled/template-utils",
+    "url-loader": "^1.1.2",
     "winston": "^3.1.0",
     "yup": "^0.26.6"
   }

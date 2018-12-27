@@ -1,15 +1,14 @@
 import React from 'react'
 import { Link, Route } from 'react-router-dom'
-import { mapValues } from 'lodash'
 
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Drawer from '@material-ui/core/Drawer'
-import { withStyles, Theme, WithStyles } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme, withStyles, Theme, WithStyles } from '@material-ui/core/styles'
+// import { Mixins } from '@material-ui/core/styles/createMixins'
+import { AppBar, Toolbar, Button, Typography, CssBaseline } from '@material-ui/core'
 
 import routes from './routes'
+
+import logo from '../bedouin.png'
+
 
 const theme = createMuiTheme({
   palette: {
@@ -19,58 +18,57 @@ const theme = createMuiTheme({
       dark: '#e1be4a',
       // contrastText?: string
     }
+  },
+  typography: {
+    useNextVariants: true,
+  },
+  mixins: {
+    mainContent: {
+      paddingLeft: '50px',
+      paddingRight: '50px'
+    }
   }
 })
-
-const drawerWidth = 240
 
 const styles = (theme: Theme) => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1
   },
+  logo: {
+    height: '18px'
+  },
+  spacer: {
+    width: '50px'
+  },
   toolbar: theme.mixins.toolbar,
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth
-  },
-  content: {
-    paddingLeft: drawerWidth
-  }
+  content: theme.mixins.mainContent
 })
 
-class App extends React.Component<WithStyles<typeof styles>> {
-  render() {
-    const { classes } = this.props
+const App = withStyles(styles)(({ classes }: WithStyles<typeof styles>) => (
+  <div>
+    <AppBar className={classes.appBar}>
+      <Toolbar>
+        <img src={logo} className={classes.logo} />
+        <div className={classes.spacer}></div>
+        <Button component={({ innerRef, ...props }) => <Link {...props} to="/templates" />}>Templates</Button>
+        <Button component={({ innerRef, ...props }) => <Link {...props} to="/jobs" />}>Jobs</Button>
+      </Toolbar>
+    </AppBar>
 
-    return (
-      <MuiThemeProvider theme={theme}>
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" color="inherit">
-              No mad
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer open variant="permanent" className={classes.drawer} classes={{paper: classes.drawerPaper}}>
-          <div className={classes.toolbar}></div>
-          <Link to="/templates">Templates</Link>
-          <Link to="/jobs">Jobs</Link>
-        </Drawer>
+    <div>
+      <div className={classes.toolbar}></div>
+      <Route {...routes.index} />
+      <Route {...routes.templates} />
+      <Route {...routes.templateDetail} />
+      <Route {...routes.jobs} />
+      <Route {...routes.jobDetail} />
+    </div>
+  </div>
+))
 
-        <div className={classes.content}>
-          <div className={classes.toolbar}></div>
-          <Route {...routes.index} />
-          <Route {...routes.templates} />
-          <Route {...routes.templateDetail} />
-          <Route {...routes.jobs} />
-          <Route {...routes.jobDetail} />
-        </div>
-      </MuiThemeProvider>
-    )
-  }
-}
-
-export default withStyles(styles)(App)
+export default () => (
+  <MuiThemeProvider theme={theme}>
+    <CssBaseline />
+    <App />
+  </MuiThemeProvider>
+)
