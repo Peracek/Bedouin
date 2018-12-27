@@ -42,13 +42,15 @@ class TemplateDefinition {
   dirPath: string
   templateName: string
   paramsName?: string
+  checksum: string
 
-  constructor(dirPath: string, templateName: string, paramsName?: string) {
+  constructor(dirPath: string, checksum: string, templateName: string, paramsName?: string) {
     //TODO: validate here?
 
     this.dirPath = dirPath
     this.templateName = templateName
     this.paramsName = paramsName
+    this.checksum = checksum
   }
 
   validate() {

@@ -19,21 +19,30 @@ export const getTemplateDirs = async () => {
       return { 
         dirPath: dir.dirPath,
         templateName: templateFile.name, 
-        paramsName: paramsFile && paramsFile.name }
+        paramsName: paramsFile && paramsFile.name,
+        checksum: dir.checksum
+      }
     })
     .filter(x => x !== undefined)
   return templateDirs as TemplateDir[]
 }
 
-export const getTemplate = async (dirPath: string) => {
+export const getTemplate = async (options: {dirPath?: string, checksum?: string}) => {
+  const { dirPath, checksum } = options
+  
   const dirs = await getTemplateDirs()
-  const dir = dirs.find(d => d.dirPath === dirPath)
+  let dir: TemplateDir | undefined
+  if(dirPath) {
+    dir = dirs.find(d => d.dirPath === dirPath)
+  } else {
+    dir = dirs.find(d => d.checksum === checksum)
+  }
 
   if(!dir) {
     throw 'TODO: direcotry not found'
   }
 
-  const template = new TemplateDefinition(dir.dirPath, dir.templateName, dir.paramsName)
+  const template = new TemplateDefinition(dir.dirPath, dir.checksum, dir.templateName, dir.paramsName)
   return template
 }
 

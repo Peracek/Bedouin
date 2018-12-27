@@ -33,7 +33,7 @@ export const observeSummary = (id: string) => {
 export const parse = async (jobHCL: string) => {
   try {
     const { data } = await http
-      .post<{[key: string]: any}>(
+      .post<Job>(
         routes.jobParse, 
         { JobHCL: jobHCL },
         {
@@ -46,8 +46,9 @@ export const parse = async (jobHCL: string) => {
   }
 }
 
-export const deploy = async (jobName: string, jobBody: object) => {
-  const payload = { job: jobBody }
+export const deploy = async (job: Job) => {
+  const { Name: jobName } = job
+  const payload = { job }
 
   try {
     await http.post(
@@ -59,7 +60,3 @@ export const deploy = async (jobName: string, jobBody: object) => {
   }
   return
 }
-
-
-// const subscription = obs.subscribe({ next: val => console.log(val) })
-// setTimeout(() => {subscription.unsubscribe(); console.log('unbsubscrigreot');}, 10000)

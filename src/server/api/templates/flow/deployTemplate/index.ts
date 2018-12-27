@@ -1,4 +1,5 @@
 import { jobs } from 'nomadClient'
+import { Job } from 'nomadClient/types'
 import { NomadError } from 'nomadClient/NomadError'
 import TemplateDefinition from "templateManager/TemplateDefinition"
 import { APIError, APIErrorType as ErrType } from 'api/APIError'
@@ -7,7 +8,7 @@ import { APIError, APIErrorType as ErrType } from 'api/APIError'
 export const deployTemplate = async (templateDef: TemplateDefinition, paramValues: {[key: string]: any}): Promise<string> => {
 
   let rendered: string
-  let jobBody: {[key: string]: any}
+  let job: Job
   
   try {
     rendered = templateDef.render(paramValues)
@@ -16,17 +17,25 @@ export const deployTemplate = async (templateDef: TemplateDefinition, paramValue
   }
 
   try {
-    jobBody = await jobs.parse(rendered)
+    job = await jobs.parse(rendered)
   } catch(err) {
     if(err instanceof NomadError) {
       throw new APIError({ apiErrortype: ErrType.JOB_PARSE_ERROR })
     }
     throw err
   }
+
+  job.Meta = {
+    _b_author: 'TODO:',
+    _b_templateName: templateDef.dirPath,
+    _b_templateChecksum: templateDef.checksum,
+    _b_templateParameters: JSON.stringify(paramValues),
+    ...job.Meta
+  }
   
-  const { Name: name } = jobBody
+  const { Name: name } = job
   try {
-    await jobs.deploy(name, jobBody)
+    await jobs.deploy(job)
   } catch(err) {
     if(err instanceof NomadError) {
       throw new APIError({ apiErrortype: ErrType.JOB_RUN_ERROR })

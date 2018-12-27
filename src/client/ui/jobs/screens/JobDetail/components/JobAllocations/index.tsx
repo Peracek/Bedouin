@@ -1,5 +1,4 @@
 import React from 'react'
-import { toPairs } from 'lodash'
 
 import { Paper, Grid, CircularProgress } from '@material-ui/core'
 import { withStyles, WithStyles } from '@material-ui/core/styles'

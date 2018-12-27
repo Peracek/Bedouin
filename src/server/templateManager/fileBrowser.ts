@@ -1,4 +1,5 @@
 import fs from 'fs-extra'
+import crypto from 'crypto'
 import { join } from 'path'
 import NodeCache from 'node-cache'
 
@@ -11,6 +12,7 @@ type Directory = {
     name: string
     path: string
   }[]
+  checksum: string
 }
 
 const dirsCache = new NodeCache<Directory[]>()
@@ -37,9 +39,16 @@ export const readDirsAtRoot = async (force: boolean = false) => {
           return fs.lstatSync(fullPath).isFile()
         })
         .map(fileName => ({ name: fileName, path: join(dir.path, fileName) }))
+      
+      const hash = crypto.createHash('md5')
+      innerContents.forEach(({ path }) => {
+        hash.update(readFileSync(path))
+      })
+
       return { 
         dirPath: dir.path,
-        contents: innerContents
+        contents: innerContents,
+        checksum: hash.digest('hex')
       }
     })
   

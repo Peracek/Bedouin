@@ -2,6 +2,7 @@
 import { TemplateDir } from '@shared/types/TemplateDir'
 import { Template } from '@shared/types/Template'
 import TemplateDeployDTO from '@shared/types/TemplateDeployDTO'
+import { log } from '@common/logger'
 import * as templateManager from 'templateManager'
 import TemplateDefinition from 'templateManager/TemplateDefinition'
 import { APIError, APIErrorType as ErrType } from 'api/APIError'
@@ -13,6 +14,7 @@ const getTemplateDirs = async (): Promise<TemplateDir[]> => {
     return templates
 
   } catch(err) {
+    log('error', err)
     if(err.code === 'ENOENT') {
       throw new APIError({ apiErrortype: ErrType.FILE_OR_DIRECTORY_NOT_FOUND, status: 400 })
     } else {
@@ -24,7 +26,7 @@ const getTemplateDirs = async (): Promise<TemplateDir[]> => {
 const getTemplate = async (dirPath: string) => {
   let templateDef: TemplateDefinition
   try {
-    templateDef = await templateManager.getTemplate(dirPath)
+    templateDef = await templateManager.getTemplate({ dirPath })
   } catch(err) {
     if(err.code === 'ENOENT') {
       throw new APIError({ apiErrortype: ErrType.FILE_OR_DIRECTORY_NOT_FOUND, status: 400 })
@@ -47,7 +49,7 @@ const deployTemplate = async (dirPath: string, paramValues: {[key: string]: any}
   let jobName: string
 
   try {
-    templateDef = await templateManager.getTemplate(dirPath)
+    templateDef = await templateManager.getTemplate({ dirPath })
   } catch(err) {
     if(err.code === 'ENOENT') {
       throw new APIError({ apiErrortype: ErrType.FILE_OR_DIRECTORY_NOT_FOUND })

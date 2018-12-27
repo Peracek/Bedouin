@@ -1,9 +1,8 @@
 import { AxiosInstance } from 'axios'
 
 import { Allocation } from '@shared/types'
-import absolutify from '@utils/absolutify'
 
-import { routes } from '.'
+import { routes, toWsUrl } from '.'
 
 export default (client: AxiosInstance) => {
 
@@ -13,7 +12,7 @@ export default (client: AxiosInstance) => {
   }
 
   const wsJobAllocations = (jobId: string) => {
-    const url = absolutify(routes.allocationsOfJob(jobId), 'ws:')
+    const url = toWsUrl(routes.allocationsOfJob(jobId))
     const ws = new WebSocket(url)
     return ws
   }

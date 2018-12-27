@@ -16,6 +16,16 @@ type DeploymentJobVersion = Deployment & {
   JobVersionSpec: JobVersion
 }
 
+type BedouinMeta = {
+  _b_author: string
+  _b_templateName: string
+  _b_templateChecksum: string
+  _b_templateParameters: string
+}
+const isBedouinMeta = (obj: { [key: string]: string }): obj is BedouinMeta => {
+  return Boolean(obj.templateName)
+}
+
 export {
   Allocation,
   AllocationStats,
@@ -24,5 +34,7 @@ export {
   JobSummary,
   JobItem,
   Job,
-  JobTaskGroup
+  JobTaskGroup,
+  BedouinMeta,
+  isBedouinMeta
 }
