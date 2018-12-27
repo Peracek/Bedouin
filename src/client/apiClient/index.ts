@@ -1,32 +1,36 @@
 import axios from 'axios'
 
+import absolutify from '@utils/absolutify'
+
 import createTemplatesApi, { TemplatesApi } from './templates'
 import createTemplateApi, { TemplateApi } from './template'
 import createJobsApi, { JobsApi } from './jobs'
-import createJobApi, { JobApi } from './job'
-import createAllocationsApi, { AllocationsApi } from './allocations'
+import createJobApi from './job'
+import createAllocationsApi from './allocations'
 
+export const baseURL = '/api'
 export const routes = {
   jobs: `jobs`,
-  // job: (id: string) => `jobs/${id}`,
+  jobSummary: (id: string) => `jobs/${id}`,
+  jobSpec: (id: string) => `jobs/${id}/spec`,
   deployments: (jobId: string) => `jobs/${jobId}/deployments`,
   templates: `templates`,
   template: (id: string) => `templates/${id}`,
   templateParams: (id: string) => `templates/${id}/parameters`,
   deployTemplate: (id: string) => `templates/${id}/deploy`,
-  allocations: (deplId: string) => `allocations?deployment=${deplId}`,
+  allocationsOfJob: (jobId: string) => `allocations?job=${jobId}`,
   allocationStats: (id: string) => `allocations/${id}/stats`,
   allocationTaskLogs: (allocId: string, taskName: string) => `allocations/${allocId}/logs/${taskName}`
 }
+export const toWsUrl = (url: string) => absolutify(`${baseURL}/${url}`, 'ws:')
+
 const client = axios.create({
-  baseURL: '/api'
+  baseURL
 })
 
-export type Routes = typeof routes
-
-export { TemplatesApi, TemplateApi, JobApi, JobsApi, AllocationsApi }
-export const templatesApi = createTemplatesApi(routes, client)
-export const templateApi = createTemplateApi(routes, client)
-export const jobsApi = createJobsApi(routes, client)
-export const jobApi = createJobApi(routes, client)
-export const allocationsApi = createAllocationsApi(routes, client)
+export { TemplatesApi, TemplateApi, JobsApi }
+export const templatesApi = createTemplatesApi(client)
+export const templateApi = createTemplateApi(client)
+export const jobsApi = createJobsApi(client)
+export const jobApi = createJobApi(client)
+export const allocationsApi = createAllocationsApi(client)

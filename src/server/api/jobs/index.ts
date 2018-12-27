@@ -1,7 +1,7 @@
 import express from 'express'
 
-import { jobs } from '../../nomadClient'
-import { getJobs, getDeployments, observeDeployments } from './controller'
+import observableToWS from '../observableToWS'
+import { getJobs, getDeployments, observeDeployments, observeAll, observeSpec, observeSummary } from './controller'
 
 const router = express.Router()
 
@@ -11,21 +11,17 @@ router.get('/', async (_, res) => {
 })
 
 router.ws('/', (ws) => {
-  const subscription = jobs.observeAll().subscribe({
-    next(jobs) {
-      ws.send(JSON.stringify(jobs))
-    },
-    error() {
-      ws.close(1011) // server error code
-    },
-    complete() {
-      ws.close(1000) // close normal code
-    }
-  })
+  observableToWS(observeAll(), ws)
+})
 
-  ws.on('close', () => {
-    subscription.unsubscribe()
-  })
+router.ws('/:jobId/spec', (ws, req) => {
+  const jobId = req.param('jobId')
+  observableToWS(observeSpec(jobId), ws)
+})
+
+router.ws('/:jobId', (ws, req) => {
+  const jobId = req.param('jobId')
+  observableToWS(observeSummary(jobId), ws)
 })
 
 router.get('/:jobId/deployments', async (req, res) => {
@@ -36,21 +32,7 @@ router.get('/:jobId/deployments', async (req, res) => {
 
 router.ws('/:jobId/deployments', (ws, req) => {
   const jobId = req.param('jobId')
-  const subscription = observeDeployments(jobId).subscribe({
-    next(deployments) {
-      ws.send(JSON.stringify(deployments))
-    },
-    error() {
-      ws.close(1011) // server error code
-    },
-    complete() {
-      ws.close(1000) // close normal code
-    }
-  })
-
-  ws.on('close', () => {
-    subscription.unsubscribe()
-  })
+  observableToWS(observeDeployments(jobId), ws)
 })
 
 export default router

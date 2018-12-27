@@ -2,8 +2,7 @@ import React from 'react'
 import { toPairs } from 'lodash'
 import { Link } from 'react-router-dom';
 
-import Allocation from '@shared/types/Allocation'
-import AllocationStats from '@shared/types/AllocationStats'
+import { Allocation, AllocationStats } from '@shared/types'
 import AllocationStatsApi from 'ui/jobs/containers/AllocationStatsApi'
 import Logs from './Logs'
 

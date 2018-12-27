@@ -1,17 +1,24 @@
+type SummaryItem = {
+  Complete: number
+  Failed: number
+  Lost: number
+  Queued: number
+  Running: number
+  Starting: number
+}
+
 type JobSummary = {
-  ID: string
-  Name: string
-  type: string // FIXME: 'service | '...'
-  Status: string // FIXME: 'pending' | '...' | '...'
-  JobSummary: {
-    Sumery: {
-      Queued: number
-      Complete: number
-      Failed: number
-      Running: number
-      Starting: number
-      Lost: number
-    }
+  Children: {
+    Dead: number
+    Pending: number
+    Running: number
+  }
+  CreateIndex: number
+  JobID: string
+  ModifyIndex: number
+  Namespace: string
+  Summary: {
+    [ key: string ]: SummaryItem
   }
 }
 

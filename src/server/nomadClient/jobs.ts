@@ -1,15 +1,19 @@
-import { JobSummary } from './types'
+import { Job, JobItem, JobSummary } from './types'
 import http, { observe, handleError } from './http'
 import routes from './routes'
 
 
-// export const get = (id: string) => {
-//   return http.get<Job>(routes.job(id))
-// }
+export const get = (id: string) => {
+  return http.get<Job>(routes.job(id))
+}
+
+export const observeOne = (jobId: string) => {
+  return observe<Job>(routes.job(jobId))
+}
 
 export const getAll = async () => {
   try {
-    const { data } = await http.get<JobSummary[]>(routes.jobs)
+    const { data } = await http.get<JobItem[]>(routes.jobs)
     return data
   }
   catch(err) {
@@ -18,7 +22,11 @@ export const getAll = async () => {
 }
 
 export const observeAll = () => {
-  return observe<JobSummary[]>(routes.jobs)
+  return observe<JobItem[]>(routes.jobs)
+}
+
+export const observeSummary = (id: string) => {
+  return observe<JobSummary>(routes.jobSummary(id))
 }
 
 /** parse HCL to JSON */

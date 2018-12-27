@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Deployment from '@shared/types/Deployment'
-import { jobApi, JobApi as JobApiSchema } from 'apiClient'
+import { jobApi } from 'apiClient'
+import { JobSummary, Job } from '@shared/types'
 
 type JobApiBag = State
 type Props = {
@@ -9,37 +9,29 @@ type Props = {
   children: React.ComponentType<{ jobApi: JobApiBag }>
 }
 type State = {
-  fetching: boolean
-  deployments: Deployment[]
+  jobSummary?: JobSummary
+  jobSpec?: Job
 }
 class JobApi extends React.Component<Props, State> {
-  state = {
-    fetching: true,
-    deployments: []
-  } as State
-
-  jobApi: JobApiSchema = jobApi
-  // ws = new WebSocket(`ws://localhost:9000/api/allocations?job=${this.props.jobId}`)
-  ws = new WebSocket(`ws://localhost:9000/api/jobs/${this.props.jobId}/deployments`)
+  state = {} as State
+  jobSpecWS = jobApi.wsJobSpec(this.props.jobId)
+  jobSummaryWS = jobApi.wsJobSummary(this.props.jobId)
 
   componentDidMount() {
-    const { jobId } = this.props
-    jobApi.fetchDeployments(jobId)
-      .then(deployments => {
-        this.setState({ deployments, fetching: false })
-      })
-    this.ws.addEventListener('message', event => {
-      const deployments = JSON.parse(event.data) as Deployment[]
-      this.setState({ deployments })
+    this.jobSpecWS.addEventListener('message', event => {
+      const jobSpec = JSON.parse(event.data) as Job
+      this.setState({ jobSpec })
     })
-    // this.ws.addEventListener('message', event => {
-    //   const allocations = JSON.parse(event.data) as Allocation[]
-    //   this.setState({ allocations })
-    // })
+
+    this.jobSummaryWS.addEventListener('message', event => {
+      const jobSummary = JSON.parse(event.data) as JobSummary
+      this.setState({ jobSummary })
+    })
   }
 
   componentWillUnmount() {
-    this.ws.close()
+    this.jobSpecWS.close()
+    this.jobSummaryWS.close()
   }
 
   render() {

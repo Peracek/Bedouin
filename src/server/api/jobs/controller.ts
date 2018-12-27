@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators'
 
-// import Job from "@shared/types/Job"
-import Deployment from "@shared/types/Deployment"
+import { Deployment } from '@shared/types'
 import * as nomad from 'nomadClient'
 
 export const getJobs = () => {
@@ -23,6 +22,10 @@ export const getDeployments = async (jobId: string): Promise<Deployment[]> => {
     }
   })
 }
+
+export const observeSpec = nomad.jobs.observeOne
+export const observeSummary = nomad.jobs.observeSummary
+export const observeAll = nomad.jobs.observeAll
 
 export const observeDeployments = (jobId: string): Observable<Deployment[]> => {
   const deploymentsObservable = nomad.deployments

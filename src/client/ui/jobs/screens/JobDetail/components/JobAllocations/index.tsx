@@ -4,17 +4,17 @@ import { toPairs } from 'lodash'
 import { Paper, Grid, CircularProgress } from '@material-ui/core'
 import { withStyles, WithStyles } from '@material-ui/core/styles'
 
-import Deployment, { DeploymentTaskGroup } from '@shared/types/Deployment'
-import Allocation from '@shared/types/Allocation'
+import { JobTaskGroup } from '@shared/types'
+import { Allocation } from '@shared/types'
 import AllocationsApi from 'ui/jobs/containers/AllocationsApi'
 import AllocationItem from '../AllocationItem'
 import AllocationDetail from '../AllocationDetail'
-import DeploymentTaskGroupDetail from '../DeploymentTaskGroupDetail'
+import JobTaskGroupDetail from '../JobTaskGroupDetail'
 
 
 type ScreenContent = 'taskGroup' | 'allocation'
 const isAllocation = (entity: any): entity is Allocation => Boolean(entity.ID)
-const isTaskGroup = (entity: any): entity is DeploymentTaskGroup => Boolean(entity.PlacedAllocs)
+const isTaskGroup = (entity: any): entity is JobTaskGroup => Boolean(entity.Tasks)
 
 
 const styles = () => ({
@@ -29,15 +29,16 @@ const styles = () => ({
 })
 
 type Props = {
-  deployment: Deployment
+  jobId: string
+  taskGroups: JobTaskGroup[]
   allocations: Allocation[]
-  selectedEntity?: Allocation | DeploymentTaskGroup
-  handleTaskGroupClick(taskGroup: DeploymentTaskGroup): void
+  selectedEntity?: Allocation | JobTaskGroup
+  handleTaskGroupClick(taskGroup: JobTaskGroup): void
   handleAllocationClick(allocation: Allocation): void
   fetchingAllocs: boolean
 }
-const JobDeployment = withStyles(styles)(({ 
-  deployment, 
+const JobAllocations = withStyles(styles)(({ 
+  taskGroups,
   allocations,
   selectedEntity, 
   fetchingAllocs, 
@@ -51,13 +52,12 @@ const JobDeployment = withStyles(styles)(({
     )
   }
 
-  const taskGroups = toPairs(deployment.TaskGroups)
-  const tgs = taskGroups.map(([name, taskGroup]) => {
-    const taskGroupAllocations = allocations.filter(a => a.TaskGroup === name)
+  const tgs = taskGroups.map(group => {
+    const taskGroupAllocations = allocations.filter(a => a.TaskGroup === group.Name)
     return (
-      <Grid item style={{width: '100%'}}>
-        <Paper className={classes.groups} onClick={() => handleTaskGroupClick(taskGroup)}>
-          {name}
+      <Grid item style={{width: '100%'}} key={group.Name}>
+        <Paper className={classes.groups} onClick={() => handleTaskGroupClick(group)}>
+          {group.Name}
           <br />
           <Grid container direction='column' spacing={8}>
             {taskGroupAllocations.map(allocation => (
@@ -90,7 +90,7 @@ const JobDeployment = withStyles(styles)(({
               <AllocationDetail allocation={selectedEntity} />
             )}
             {selectedEntity && isTaskGroup(selectedEntity) && (
-              <DeploymentTaskGroupDetail taskGroup={selectedEntity} />
+              <JobTaskGroupDetail taskGroup={selectedEntity} />
             )}
           </Paper>
         </Grid>
@@ -101,11 +101,12 @@ const JobDeployment = withStyles(styles)(({
 
 
 type EnhanceProps = {
-  deployment: Deployment
+  jobId: string
+  taskGroups: JobTaskGroup[]
 }
 type EnhanceState = {
   screenContent?: ScreenContent
-  selectedEntity?: Allocation | DeploymentTaskGroup
+  selectedEntity?: Allocation | JobTaskGroup
 }
 const enhance = (BaseComponent: React.ComponentType<Props>) => {
   class Enhance extends React.Component<EnhanceProps, EnhanceState> {
@@ -113,7 +114,7 @@ const enhance = (BaseComponent: React.ComponentType<Props>) => {
     // TODO: allocations fetch
     state = {} as EnhanceState
 
-    handleTaskGroupClick = (taskGroup: DeploymentTaskGroup) => {
+    handleTaskGroupClick = (taskGroup: JobTaskGroup) => {
       this.setState({ screenContent: 'taskGroup', selectedEntity: taskGroup })
     }
 
@@ -123,10 +124,11 @@ const enhance = (BaseComponent: React.ComponentType<Props>) => {
 
     render() {
       return (
-        <AllocationsApi deplId={this.props.deployment.ID}>
+        <AllocationsApi jobId={this.props.jobId}>
           {({ allocationsApi: { allocations, fetching } }) => (
             <BaseComponent 
-              deployment={this.props.deployment}
+              jobId={this.props.jobId}
+              taskGroups={this.props.taskGroups}
               allocations={allocations} 
               selectedEntity={this.state.selectedEntity}
               handleTaskGroupClick={this.handleTaskGroupClick}
@@ -140,4 +142,4 @@ const enhance = (BaseComponent: React.ComponentType<Props>) => {
   return Enhance
 }
 
-export default enhance(JobDeployment)
+export default enhance(JobAllocations)

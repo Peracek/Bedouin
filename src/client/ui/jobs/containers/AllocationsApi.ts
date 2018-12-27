@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Allocation from '@shared/types/Allocation'
-import { allocationsApi, AllocationsApi as AllocationsApiSchema, routes } from 'apiClient'
+import { Allocation } from '@shared/types'
+import { allocationsApi } from 'apiClient'
 
 
 type State = {
@@ -10,7 +10,7 @@ type State = {
 }
 type AllocationsApiBag = State
 type Props = {
-  deplId: string
+  jobId: string
   children: React.ComponentType<{ allocationsApi: AllocationsApiBag }>
 }
 
@@ -19,13 +19,11 @@ class AllocationsApi extends React.Component<Props, State> {
     fetching: true,
     allocations: []
   } as State
-
-  // TODO: try whather relative address works
-  ws = new WebSocket(`ws://localhost:9000/api/${routes.allocations(this.props.deplId)}`)
+  ws = allocationsApi.wsJobAllocations(this.props.jobId)
 
   componentDidMount() {
-    const { deplId } = this.props
-    allocationsApi.fetchAllocations(deplId)
+    const { jobId } = this.props
+    allocationsApi.fetchJobAllocations(jobId)
     .then(allocations => {
       this.setState({ allocations, fetching: false })
     })

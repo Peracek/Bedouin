@@ -2,26 +2,26 @@ import React from 'react'
 
 // import Job from '@shared/types/Job'
 import JobApi from 'ui/jobs/containers/JobApi'
-import Deployment from '@shared/types/Deployment'
-import JobDeployment from './components/JobDeployment'
+import JobAllocations from './components/JobAllocations'
+import { Job, JobSummary } from '@shared/types'
 
 
 type Props = {
-  fetching: boolean
-  jobId: string
-  deployments: Deployment[]
+  jobSummary?: JobSummary
+  jobSpec?: Job
 }
-const JobDetail = ({ fetching, jobId, deployments }: Props) => {
-  if(fetching) {
+const JobDetail = ({ jobSummary, jobSpec }: Props) => {
+  if(!jobSummary || !jobSpec) {
     return <span>fetching...</span>
   }
-  const latestDeployment = deployments.sort((a, b) => b.JobVersion - a.JobVersion)[0]
-
+  
   return (
     <div>
-      <div>{jobId}</div>
-      <br />
-      <JobDeployment deployment={latestDeployment} />
+      <div>{jobSummary.JobID}</div>
+      <br /><br />
+      TODO: template summary
+      <br /><br />
+      <JobAllocations jobId={jobSummary.JobID} taskGroups={jobSpec.TaskGroups} />
     </div>
   )
 }
@@ -35,7 +35,7 @@ const JobDetailScreen = (props: ScreenProps) => {
 
   return (
     <JobApi jobId={id}>
-      {({ jobApi }) => <JobDetail {...jobApi} jobId={id} />}
+      {({ jobApi }) => <JobDetail {...jobApi} />}
     </JobApi>
   )
 }

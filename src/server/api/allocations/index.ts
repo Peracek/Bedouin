@@ -1,4 +1,5 @@
 import express from 'express'
+import { Observable } from 'rxjs';
 
 import { allocations } from 'nomadClient'
 import { Allocation } from 'nomadClient/types'
@@ -6,12 +7,18 @@ import { Allocation } from 'nomadClient/types'
 const router = express.Router()
 
 router.ws('/', (ws, req) => {
-  const { deployment: deplId } = req.query
-  if(!deplId) {
-    ws.close(undefined, 'Missing job query param')
+  const { deployment: deplId, job: jobId } = req.query
+
+  let observable: Observable<Allocation[]>
+  if(deplId) {
+    observable = allocations.observeOfDeployment(deplId)
+  } else if (jobId) {
+    observable = allocations.observeOfJob(jobId)
+  } else {
+    ws.close(undefined, 'Missing job or deployment query param')
     return
   }
-  const subscription = allocations.observeOfDeployment(deplId).subscribe({
+  const subscription = observable.subscribe({
     next(allocs) {
       ws.send(JSON.stringify(allocs))
     },
@@ -69,13 +76,14 @@ router.ws('/:id/stats', (ws, req) => {
 })
 
 router.get('/', async (req, res) => {
-  const { deployment: deplId } = req.query
+  const { deployment: deplId, job: jobId } = req.query
   let data: Allocation[]
   if(deplId) {
     data = await allocations.getOfDeployment(deplId)
+  } else if(jobId) {
+    data = await allocations.getOfJob(jobId)
   } else {
-    const response = await allocations.getAll()
-    data = response.data
+    return res.status(400).send(`Missing query param 'job' or 'deployment'`)
   }
   res.json(data)
 })

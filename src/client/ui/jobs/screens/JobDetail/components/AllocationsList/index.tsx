@@ -8,7 +8,7 @@ import {
   TableCell
 } from '@material-ui/core'
 
-import Allocation from '@shared/types/Allocation'
+import { Allocation } from '@shared/types'
 
 
 type Props = {

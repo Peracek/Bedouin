@@ -16,8 +16,17 @@ export const get = async (id: string) => {
   }
 }
 
-export const getAll = () => {
-  return http.get<Allocation[]>(routes.allocations)
+export const getOfJob = async (jobId: string) => {
+  try {
+    const { data } = await http.get<Allocation[]>(routes.allocationsofJob(jobId))
+    return data
+  } catch(err) {
+    throw handleError(err)
+  }
+}
+
+export const observeOfJob = (jobId: string) => {
+  return observe<Allocation[]>(routes.allocationsofJob(jobId))
 }
 
 export const getOfDeployment = async (deplId: string) => {

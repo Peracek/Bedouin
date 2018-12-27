@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Allocation from '@shared/types/Allocation'
+import { Allocation } from '@shared/types'
 import AllocationStatus from 'ui/jobs/components/AllocationStatus'
 
 type Props = {

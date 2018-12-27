@@ -1,6 +1,6 @@
 import React from 'react'
 
-import JobSummary from '@shared/types/JobSummary'
+import { JobSummary } from '@shared/types'
 import { jobsApi } from 'apiClient'
 
 

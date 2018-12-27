@@ -1,6 +1,6 @@
 import React from 'react'
 
-import AllocationStats from '@shared/types/AllocationStats'
+import { AllocationStats } from '@shared/types'
 import { routes } from 'apiClient'
 
 type State = {

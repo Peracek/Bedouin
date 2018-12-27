@@ -1,21 +1,31 @@
 import { AxiosInstance } from 'axios'
 
-// import notify from '@common/notify'
-import Deployment from '@shared/types/Deployment'
+import { Deployment } from '@shared/types'
 
-import { Routes } from '.'
+import { routes, toWsUrl } from '.'
 
-export type JobApi = {
-  fetchDeployments: (jobId: string) => Promise<Deployment[]>,
-}
-export default (routes: Routes, client: AxiosInstance) => {
+export default (client: AxiosInstance) => {
   
-  const fetchDeployments: JobApi['fetchDeployments'] = async (jobId) => {
+  const fetchDeployments = async (jobId: string) => {
     const { data } = await client.get<Deployment[]>(routes.deployments(jobId))
     return data
   }
 
+  const wsJobSummary = (jobId: string) => {
+    const url = toWsUrl(routes.jobSummary(jobId))
+    const ws = new WebSocket(url)
+    return ws
+  }
+
+  const wsJobSpec = (jobId: string) => {
+    const url = toWsUrl(routes.jobSpec(jobId))
+    const ws = new WebSocket(url)
+    return ws
+  }
+
   return {
-    fetchDeployments
+    fetchDeployments,
+    wsJobSummary,
+    wsJobSpec
   }
 }

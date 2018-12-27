@@ -3,14 +3,14 @@ import { AxiosInstance } from 'axios'
 import { Template } from '@shared/types/Template'
 import TemplateDeployDTO from '@shared/types/TemplateDeployDTO'
 import APIError from './APIError'
-import { Routes } from '.'
+import { routes } from '.'
 
 
 export type TemplateApi = {
   fetch: () => Promise<Template>
   deployTemplate: (values: { [key: string]: any }) => Promise<string>
 }
-export default (routes: Routes, client: AxiosInstance) => 
+export default (client: AxiosInstance) => 
   (templateId: string) => {
     const id = templateId
 

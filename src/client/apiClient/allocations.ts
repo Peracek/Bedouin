@@ -1,20 +1,25 @@
 import { AxiosInstance } from 'axios'
 
-import Allocation from '@shared/types/Allocation'
+import { Allocation } from '@shared/types'
+import absolutify from '@utils/absolutify'
 
-import { Routes } from '.'
+import { routes } from '.'
 
-export type AllocationsApi = {
-  fetchAllocations: (deplId: string) => Promise<Allocation[]>
-}
-export default (routes: Routes, client: AxiosInstance) => {
+export default (client: AxiosInstance) => {
 
-  const fetchAllocations: AllocationsApi['fetchAllocations'] = async (deplId) => {
-    const { data } = await client.get<Allocation[]>(routes.allocations(deplId))
+  const fetchJobAllocations = async (jobId: string) => {
+    const { data } = await client.get<Allocation[]>(routes.allocationsOfJob(jobId))
     return data
   }
 
+  const wsJobAllocations = (jobId: string) => {
+    const url = absolutify(routes.allocationsOfJob(jobId), 'ws:')
+    const ws = new WebSocket(url)
+    return ws
+  }
+
   return {
-    fetchAllocations
+    fetchJobAllocations,
+    wsJobAllocations
   }
 }
