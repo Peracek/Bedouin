@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { CircularProgress } from '@material-ui/core'
 
+import BreadcrumbsToolbar from 'components/BreadcrumbsToolbar'
 import JobsApi, { JobsApiBag } from '../../containers/JobsApi'
 
 
@@ -12,9 +13,14 @@ const Jobs = ({ fetching, jobs }: Props) => {
     return <CircularProgress />
   }
 
-  return <div>{jobs.map(job => (
-    <div key={job.ID}><Link to={`/jobs/${job.ID}`}>{job.Name}</Link><span>{job.Status}</span></div>
-  ))}</div>
+  return (
+    <div>
+      <BreadcrumbsToolbar />
+      {jobs.map(job => (
+        <div key={job.ID}><Link to={`/jobs/${job.ID}`}>{job.Name}</Link><span>{job.Status}</span></div>
+      ))}
+    </div>
+  )
 }
 
 const JobsScreen = () => (

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import BreadcrumbsToolbar from 'components/BreadcrumbsToolbar'
 import JobApi from 'ui/jobs/containers/JobApi'
 import JobAllocations from './components/JobAllocations'
 import { Job, JobSummary, isBedouinMeta } from '@shared/types'
@@ -24,6 +25,7 @@ const JobDetail = ({ jobSummary, jobSpec }: Props) => {
   
   return (
     <div>
+      <BreadcrumbsToolbar />
       <div>{jobSummary.JobID}</div>
       <br /><br />
       {templateInfo}

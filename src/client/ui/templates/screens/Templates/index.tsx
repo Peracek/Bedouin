@@ -1,6 +1,7 @@
 import React from 'react'
 import { createComposer } from 'recompost'
 
+import BreadcrumbsToolbar from 'components/BreadcrumbsToolbar'
 import TemplatesApi, { TemplateApiBag } from '../../containers/TemplatesApi'
 import TemplateList from './components/TemplateList'
 
@@ -17,6 +18,7 @@ const Templates = enhance(({ templatesApi: { templates, fetching }}) => {
   }
   return (
     <div>
+      <BreadcrumbsToolbar />
       <TemplateList templates={templates!} />
     </div>
   )
