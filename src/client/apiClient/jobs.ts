@@ -4,7 +4,7 @@ import { AxiosInstance, AxiosResponse } from 'axios'
 // import notify from '@common/notify'
 import { JobItem } from '@shared/types'
 
-import { routes } from '.'
+import { routes, toWsUrl } from '.'
 
 export type JobsApi = {
   fetch: () => Promise<JobItem[]>,
@@ -16,7 +16,14 @@ export default (client: AxiosInstance) => {
     return data
   }
 
+  const wsJobs = () => {
+    const url = toWsUrl(routes.jobs)
+    const ws = new WebSocket(url)
+    return ws
+  }
+
   return {
-    fetch
+    fetch,
+    wsJobs
   }
 }

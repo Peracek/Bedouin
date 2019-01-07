@@ -1,4 +1,5 @@
 {
+  "nomadUrl": "",
   "templateRootDirectory": "",
   "authentication": {
     "enable": true,

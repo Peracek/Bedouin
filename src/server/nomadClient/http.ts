@@ -1,11 +1,12 @@
 import axios, { AxiosError } from 'axios'
 import { Observable, Observer } from 'rxjs'
 
+import config from '../.././../config.json'
 import { log } from 'common/logger'
 import { NomadError } from './NomadError'
 
 
-const baseURL = 'http://localhost:4646/v1' // TODO: move to config
+const baseURL = `${config.nomadUrl}v1`
 
 const http = axios.create({
   baseURL

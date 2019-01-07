@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { routes } from 'apiClient'
+import { routes, toWsUrl } from 'apiClient'
 
 type State = {
   lastLogUpdate: Date
@@ -18,7 +18,10 @@ class AllocationTaskApi extends React.Component<Props, State> {
   state = {} as State
 
   logChunks = [] as string[]
-  ws = new WebSocket(`ws://localhost:9000/api/${routes.allocationTaskLogs(this.props.allocationId, this.props.taskName)}`)
+  ws = (() => {
+    const url = toWsUrl(routes.allocationTaskLogs(this.props.allocationId, this.props.taskName))
+    return new WebSocket(url)
+  })()
 
   get log() {
     return this.logChunks.join('')

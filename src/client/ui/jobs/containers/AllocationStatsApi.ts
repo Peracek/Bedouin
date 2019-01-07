@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { AllocationStats } from '@shared/types'
-import { routes } from 'apiClient'
+import { routes, toWsUrl } from 'apiClient'
 
 type State = {
   stats?: AllocationStats
@@ -15,7 +15,10 @@ type Props = {
 class AllocationStatsApi extends React.Component<Props, State> {
   state = {} as State
 
-  ws = new WebSocket(`ws://localhost:9000/api/${routes.allocationStats(this.props.allocationId)}`)
+  ws = (() => {
+    const url = toWsUrl(routes.allocationStats(this.props.allocationId))
+    return new WebSocket(url)
+  })()
 
   componentDidMount() {
     this.ws.addEventListener('message', event => {

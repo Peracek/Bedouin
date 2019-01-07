@@ -3,7 +3,12 @@ import jwt from 'jsonwebtoken'
 import { APIError } from 'api/APIError';
 
 const authMiddleware: RequestHandler = (req, res, next) => {
-  console.log(req.headers)
+  // websocket connection are not authenticated
+  if(req.url.endsWith('.websocket')) {
+    next()
+    return
+  }
+
   const { authorization } = req.headers
   if(!authMiddleware) {
     next(new APIError({ status: 403 }))
