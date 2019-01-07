@@ -1,0 +1,10 @@
+{
+  "templateRootDirectory": "",
+  "authentication": {
+    "enable": true,
+    "oauthUrl": "",
+    "openIdUrl": "",
+    "clientId": "",
+    "publicKey": ""
+  }
+}

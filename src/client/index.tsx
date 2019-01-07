@@ -5,10 +5,16 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './ui/App';
 // import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById('root') as HTMLElement
-);
+import { authenticate } from  './authentication'
+
+authenticate()
+  .then(() => {
+    ReactDOM.render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>,
+      document.getElementById('root') as HTMLElement
+    )
+  })
+
 // registerServiceWorker();

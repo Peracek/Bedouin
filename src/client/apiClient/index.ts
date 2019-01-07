@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import absolutify from '@utils/absolutify'
+import { authStorage }  from 'authentication'
 
 import createTemplatesApi, { TemplatesApi } from './templates'
 import createTemplateApi, { TemplateApi } from './template'
@@ -25,7 +26,14 @@ export const routes = {
 export const toWsUrl = (url: string) => absolutify(`${baseURL}/${url}`, 'ws:')
 
 const client = axios.create({
-  baseURL
+  baseURL,
+  headers: {
+    Authorization: {
+      toString () {
+        return `Bearer ${authStorage.token}`
+      }
+    }
+  }
 })
 
 export { TemplatesApi, TemplateApi, JobsApi }
