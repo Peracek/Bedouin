@@ -44,7 +44,7 @@ const getTemplate = async (dirPath: string) => {
   return result
 }
 
-const deployTemplate = async (dirPath: string, paramValues: {[key: string]: any}): Promise<TemplateDeployDTO> => {
+const deployTemplate = async (dirPath: string, paramValues: {[key: string]: any}, user?: {name: string, email: string}): Promise<TemplateDeployDTO> => {
   let templateDef: TemplateDefinition
   let jobName: string
 
@@ -57,8 +57,9 @@ const deployTemplate = async (dirPath: string, paramValues: {[key: string]: any}
       throw err
     }
   }
+
   try {
-    jobName = await deploy(templateDef, paramValues)
+    jobName = await deploy(templateDef, paramValues, user)
   } catch(err) {
     throw err
   }

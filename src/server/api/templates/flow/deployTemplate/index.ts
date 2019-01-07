@@ -5,7 +5,7 @@ import TemplateDefinition from "templateManager/TemplateDefinition"
 import { APIError, APIErrorType as ErrType } from 'api/APIError'
 
 
-export const deployTemplate = async (templateDef: TemplateDefinition, paramValues: {[key: string]: any}): Promise<string> => {
+export const deployTemplate = async (templateDef: TemplateDefinition, paramValues: {[key: string]: any}, user?: {name: string, email:string}): Promise<string> => {
 
   let rendered: string
   let job: Job
@@ -26,7 +26,7 @@ export const deployTemplate = async (templateDef: TemplateDefinition, paramValue
   }
 
   job.Meta = {
-    _b_author: 'TODO:',
+    _b_author: JSON.stringify(user),
     _b_templateName: templateDef.dirPath,
     _b_templateChecksum: templateDef.checksum,
     _b_templateParameters: JSON.stringify(paramValues),

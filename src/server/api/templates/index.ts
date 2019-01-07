@@ -26,7 +26,7 @@ router.post('/:dirName/deploy', async (req, res, next) => {
   const { body, params: { dirName } } = req
   let data: TemplateDeployDTO
   try {
-    data = await deployTemplate(dirName, body)
+    data = await deployTemplate(dirName, body, req.user)
   } catch(err) {
     next(err)
     return

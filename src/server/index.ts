@@ -1,6 +1,8 @@
 import express, { ErrorRequestHandler } from 'express'
 import expressWs from 'express-ws'
 
+import config from '../../config.json'
+import authMiddleware from './authMiddleware'
 import { log } from 'common/logger'
 import { APIError } from 'api/APIError'
 
@@ -24,11 +26,15 @@ app.use((__dirname, res, next) => {
 })
 app.use(express.json())
 
+if(config.authentication && config.authentication.enable) {
+  app.use(authMiddleware)
+}
+
 app.use('/api/templates', templatesRouter)
 app.use('/api/jobs', jobsRouter)
 app.use('/api/allocations', allocationsRouter)
 
-app.get('/api/', (_, res) => res.send('Hello World!'))
+app.get('/api/', (_, res) => res.send('I\'m alive!'))
 
 app.use(((err, req, res, next) => {
   if(err instanceof APIError) {
