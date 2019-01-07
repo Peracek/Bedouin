@@ -2,13 +2,12 @@
   "name": "bedouin",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server-dev": "cross-env NODE_ENV=development webpack --watch --config webpack.config.server.js",
-    "server-build": "echo \"Error: build script missing\" && exit 1",
+    "server-build": "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
     "client-dev": "cross-env NODE_ENV=development webpack-serve --config webpack.config.client.js",
-    "client-build": "echo \"Error: build script missing\" && exit 1"
+    "client-build": "cross-env NODE_ENV=production webpack --config webpack.config.client.js"
   },
   "author": "",
   "license": "ISC",

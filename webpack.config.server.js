@@ -23,6 +23,11 @@ module.exports = {
     publicPath: '/'
   },
 
+  node: {
+    __filename: false,
+    __dirname: false
+  },
+
   module: {
     rules: [
       { 
@@ -57,6 +62,6 @@ module.exports = {
     //   raw: true,
     //   entryOnly: false,
     // }),
-    IS_DEV && new WebpackNodeUtilsRunner('index.js'),
+    IS_DEV ? new WebpackNodeUtilsRunner('index.js') : () => {},
   ],
 }

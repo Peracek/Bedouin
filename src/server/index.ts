@@ -1,5 +1,6 @@
 import express, { ErrorRequestHandler } from 'express'
 import expressWs from 'express-ws'
+import path from 'path'
 
 import config from '../../config.json'
 import authMiddleware from './authMiddleware'
@@ -26,8 +27,16 @@ app.use((__dirname, res, next) => {
 })
 app.use(express.json())
 
+// if production -> serve frontend assets
+if(process.env.NODE_ENV !== 'development') {
+  app.get('/', (_, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'))
+  })
+  app.use(express.static(path.join(__dirname, 'client')))
+}
+
 if(config.authentication && config.authentication.enable) {
-  app.use(authMiddleware)
+  app.use('/api', authMiddleware)
 }
 
 app.use('/api/templates', templatesRouter)
@@ -37,6 +46,7 @@ app.use('/api/allocations', allocationsRouter)
 app.get('/api/', (_, res) => res.send('I\'m alive!'))
 
 app.use(((err, req, res, next) => {
+  console.log(err)
   if(err instanceof APIError) {
     res.status(err.status).json(err.body)
     return
