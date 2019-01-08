@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "84758759-2b3d-4ce8-9d70-8ce8451f7215",
+		"name": "BedouinTests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "load index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bedouinBaseUrl}}",
+					"host": [
+						"{{bedouinBaseUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get templates",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "08430110-ac03-47bf-b499-6a2b94cfeb63",
+						"exec": [
+							"pm.test(\"Validate templates payload\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log(jsonData)",
+							"    pm.expect(jsonData).to.eql([",
+							"        {",
+							"            \"dirPath\": \"loggr\",",
+							"            \"templateName\": \"loggg.nomad\",",
+							"            \"paramsName\": \"params.tf\",",
+							"            \"checksum\": \"c96723d26c4eff6453709f956fb89b9c\"",
+							"        },",
+							"        {",
+							"            \"dirPath\": \"redis\",",
+							"            \"templateName\": \"redis.nomad\",",
+							"            \"paramsName\": \"params.tf\",",
+							"            \"checksum\": \"55201c165054b047873907aa2837d34b\"",
+							"        }",
+							"    ]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bedouinBaseUrl}}/api/templates",
+					"host": [
+						"{{bedouinBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deploy logger template",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Pragma",
+						"value": "no-cache"
+					},
+					{
+						"key": "Origin",
+						"value": "http://localhost:9000"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "cs-CZ,cs;q=0.9,ka-GE;q=0.8,ka;q=0.7,en;q=0.6,ru-RU;q=0.5,ru;q=0.4"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer undefined"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;charset=UTF-8"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
+					},
+					{
+						"key": "Cookie",
+						"value": "cookie-consent-message-dismissed=true"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Referer",
+						"value": "http://localhost:9000/templates/loggr"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"jobName\":\"test_logga\"}"
+				},
+				"url": {
+					"raw": "{{bedouinBaseUrl}}/api/templates/loggr/deploy",
+					"host": [
+						"{{bedouinBaseUrl}}"
+					],
+					"path": [
+						"api",
+						"templates",
+						"loggr",
+						"deploy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

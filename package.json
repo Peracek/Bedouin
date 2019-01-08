@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./test.sh",
     "server-dev": "cross-env NODE_ENV=development webpack --watch --config webpack.config.server.js",
     "server-build": "cross-env NODE_ENV=production webpack --config webpack.config.server.js",
     "client-dev": "cross-env NODE_ENV=development webpack-serve --config webpack.config.client.js",

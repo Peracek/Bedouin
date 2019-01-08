@@ -12,7 +12,7 @@ expressWs(app)
 // NOTE: this has to be after app's websocket initialization
 import { templatesRouter, jobsRouter, allocationsRouter } from './api'
 
-const port = 3001
+const port = process.env.BEDOUIN_PORT || 3001
 
 // enable CORS
 app.use(function(_, res, next) {

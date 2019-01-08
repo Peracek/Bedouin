@@ -8,7 +8,7 @@ let authenticated = false
 export const authStorage = {} as { token?: string }
 
 export const authenticate = async () => {
-if(config.authentication && !authenticated) {
+if(config.authentication && config.authentication.enable && !authenticated) {
   
   const { url: currentUrl, query: { code, session_state } } = qs.parseUrl(window.location.href)
   const { oauthUrl, clientId, openIdUrl } = config.authentication

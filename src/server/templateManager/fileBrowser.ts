@@ -4,7 +4,7 @@ import { join } from 'path'
 import NodeCache from 'node-cache'
 
 import config from '../../../config.json'
-const rootDirPath = config.templateRootDirectory
+const rootDirPath = process.env.TEMPLATES_DIR || config.templateRootDirectory // FIXME: nasty config workaround for testing purposes
 
 type Directory = {
   dirPath: string
