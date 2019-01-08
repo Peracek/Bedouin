@@ -10,7 +10,7 @@
     "client-build": "cross-env NODE_ENV=production webpack --config webpack.config.client.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/express-ws": "^3.0.0",
